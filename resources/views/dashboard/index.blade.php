@@ -62,7 +62,7 @@
                     <ul class="menu menu-compact">
                         @forelse ($recentActivities as $activity)
                             <li>
-                                <a class="flex justify-between hover:bg-base-200">
+                                <a class="flex justify-between hover:bg-base-200 font-[onest]">
                                     <span class="flex-1">{{ $activity['type'] }}: {{ $activity['message'] }}</span>
                                     <span class="badge badge-info ml-2">
                                         {{ \Carbon\Carbon::parse($activity['time'])->locale('id')->diffForHumans() }}
