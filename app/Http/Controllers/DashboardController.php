@@ -17,11 +17,13 @@ class DashboardController extends Controller
         $bulanIni = now()->month;
         $tahunIni = now()->year;
 
+        // Data Pendaftar
         $pendaftar = Pendaftaran::orderBy('created_at', 'desc')->get();
         $dailyPatients = $pendaftar->groupBy(function ($item) {
             return Carbon::parse($item->created_at)->format('Y-m-d');
         })->map->count()->toArray();
 
+        // Aktivitas terbaru
         $recentActivities = collect()
             ->merge(
                 Pendaftaran::select('id', 'nama', 'created_at')
@@ -30,7 +32,7 @@ class DashboardController extends Controller
                     ->get()
                     ->map(function ($item) {
                         return [
-                            'type' => 'Pendaftaran Pasien baru',
+                            'type' => 'Pendaftaran Pasien Baru',
                             'message' => $item->nama,
                             'time' => $item->created_at,
                         ];
@@ -44,7 +46,7 @@ class DashboardController extends Controller
                     ->get()
                     ->map(function ($item) {
                         return [
-                            'type' => 'Melakukan tindakan ' . $item->opsi->nama . ' kepada pasien',
+                            'type' => 'Melakukan tindakan ' . $item->opsi_tindakan . ' kepada pasien',
                             'message' => $item->pendaftarans->nama,
                             'time' => $item->created_at,
                         ];
@@ -53,6 +55,7 @@ class DashboardController extends Controller
             ->sortByDesc('time')
             ->take(5);
 
+        // Data untuk tampilan
         return view('dashboard.index', [
             'pendaftar' => $pendaftar,
             'dailyPatients' => $dailyPatients,
@@ -64,6 +67,17 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function filterAjax(Request $request)
+    {
+        $date = $request->get('filter_date');
+
+        // Hitung total pemasukan berdasarkan tanggal
+        $pemasukan = Tindakan::whereDate('tanggal', $date)->sum('biaya');
+
+        return response()->json([
+            'pemasukan' => number_format($pemasukan, 0, ',', '.'),
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

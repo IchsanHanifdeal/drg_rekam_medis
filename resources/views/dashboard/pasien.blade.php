@@ -1,124 +1,4 @@
-<x-dashboard.main title="Pendaftaran">
-    <div class="flex flex-col lg:flex-row gap-5">
-        <div class="bg-neutral flex flex-col border-back rounded-xl w-full p-5 sm:p-7">
-            <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
-                Tambah Pasien
-            </h1>
-            <p class="text-sm opacity-60 text-white">
-                Fitur Tambah pasien memungkinkan pengguna untuk menambahkan data pasien ke sistem.
-            </p>
-
-            <div class="flex justify-end mb-4">
-                <div class="bg-[#aa8f55] text-white font-semibold rounded-lg px-4 py-2">
-                    No. Rekam Medis: <span id="registrationNumber">{{ $nomor_rekam_medis }}</span>
-                </div>
-            </div>
-
-            <form method="POST" action="{{ route('store.pendaftaran') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
-                        @foreach (['nama', 'umur', 'jenis_kelamin', 'alamat', 'no_hp'] as $type)
-                            <div class="flex items-center gap-3">
-                                <label for="{{ $type }}"
-                                    class="text-md font-medium text-white dark:text-white w-32">
-                                    {{ ucfirst(str_replace('_', ' ', $type)) }}
-                                </label>
-
-                                @if ($type == 'umur')
-                                    <div class="flex-1 relative">
-                                        <input type="date" id="{{ $type }}" name="{{ $type }}"
-                                            class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
-                                            value="" onchange="calculateAge()" aria-label="Pilih umur" />
-
-                                        <input type="text" id="ageInput" name="umur_tampil"
-                                            class="hidden bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
-                                            readonly value="{{ old('umur') }}" />
-
-                                        <button type="button" id="editAgeButton"
-                                            class="absolute right-3 top-3 text-white btn hidden"
-                                            style="background-color:#aa8f55" onclick="enableDateInput()">Edit</button>
-                                    </div>
-                                @elseif ($type == 'jenis_kelamin')
-                                    <select id="{{ $type }}" name="{{ $type }}"
-                                        class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror"
-                                        aria-label="Pilih jenis kelamin">
-                                        <option value="">Pilih Jenis Kelamin</option>
-                                        <option value="laki-laki" {{ old($type) == 'laki-laki' ? 'selected' : '' }}>
-                                            Laki-laki
-                                        </option>
-                                        <option value="perempuan" {{ old($type) == 'perempuan' ? 'selected' : '' }}>
-                                            Perempuan
-                                        </option>
-                                    </select>
-                                @else
-                                    <input type="text" id="{{ $type }}" name="{{ $type }}"
-                                        placeholder="Masukkan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror capitalize"
-                                        value="" aria-label="Masukkan {{ str_replace('_', ' ', $type) }}" />
-                                @endif
-
-                                @error($type)
-                                    <span class="text-red-500 text-md">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="modal-action">
-                    <button type="submit" class="btn w-full text-white sm:w-auto" style="background-color: #aa8f55;">
-                        Simpan
-                    </button>
-                </div>
-            </form>
-
-            <script>
-                function calculateAge() {
-                    const birthDate = new Date(document.getElementById('umur').value);
-                    const currentDate = new Date();
-
-                    if (!birthDate.getTime()) return;
-
-                    let years = currentDate.getFullYear() - birthDate.getFullYear();
-                    let months = currentDate.getMonth() - birthDate.getMonth();
-                    let days = currentDate.getDate() - birthDate.getDate();
-
-                    if (months < 0 || (months === 0 && days < 0)) {
-                        years--;
-                        months += 12;
-                    }
-
-                    if (days < 0) {
-                        const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0);
-                        days += lastMonth.getDate();
-                    }
-
-                    const ageInput = document.getElementById('ageInput');
-                    ageInput.value = `${years} tahun, ${months} bulan, ${days} hari`;
-
-                    document.getElementById('umur').classList.add('hidden');
-                    ageInput.classList.remove('hidden');
-                    document.getElementById('editAgeButton').classList.remove('hidden');
-                }
-
-                function enableDateInput() {
-                    const ageInput = document.getElementById('ageInput');
-                    const dateInput = document.getElementById('umur');
-
-                    dateInput.classList.remove('hidden');
-                    ageInput.classList.add('hidden');
-                    document.getElementById('editAgeButton').classList.add('hidden');
-                }
-
-                if (document.getElementById('umur').value) {
-                    calculateAge();
-                }
-            </script>
-        </div>
-    </div>
-
-
+<x-dashboard.main title="Pasien">
     <div class="flex gap-5">
         @foreach (['data_pasien'] as $item)
             <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
@@ -258,8 +138,7 @@
                                                             method="POST" class="inline-block">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-error">Hapus</button>
+                                                            <button type="submit" class="btn btn-error">Hapus</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -285,27 +164,27 @@
         const tableRows = dataTable.querySelectorAll('tbody tr');
         const noDataRow = document.createElement('tr');
         const noDataCell = document.createElement('td');
-        
+
         noDataCell.colSpan = tableRows[0].cells.length;
         noDataCell.textContent = 'Data tidak ditemukan';
         noDataRow.appendChild(noDataCell);
-        
+
         searchInput.addEventListener('keyup', function() {
             const query = searchInput.value.toLowerCase();
             let rowVisible = false;
-        
+
             tableRows.forEach(row => {
                 let rowMatch = false;
-        
+
                 for (let i = 0; i < row.cells.length; i++) {
                     const cellText = row.cells[i].textContent.toLowerCase();
-                    
+
                     if (cellText.includes(query)) {
                         rowMatch = true;
                         break;
                     }
                 }
-        
+
                 if (rowMatch) {
                     row.style.display = '';
                 } else {
@@ -313,7 +192,7 @@
                 }
                 rowVisible = rowVisible || rowMatch;
             });
-        
+
             if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
                 noDataRow.setAttribute('data-no-data', 'true');
                 dataTable.querySelector('tbody').appendChild(noDataRow);
@@ -322,5 +201,4 @@
             }
         });
     </script>
-    
 </x-dashboard.main>

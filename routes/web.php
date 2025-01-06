@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\OpsiTindakanController;
+use App\Models\Pendaftaran;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +45,8 @@ Route::delete('/opsi_tindakan/{id}/delete', [OpsiTindakanController::class, 'des
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
 Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
 Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
+
+Route::get('/pasien', [PendaftaranController::class, 'pasien'])->name('pasien');
+Route::get('/pemasukan/filter', [DashboardController::class, 'filterAjax'])->name('pemasukan.filter.ajax');
+
+

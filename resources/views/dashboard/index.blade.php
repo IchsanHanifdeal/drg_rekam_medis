@@ -31,16 +31,39 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             @foreach ($stats as $stat)
-                <div
-                    class="card shadow-lg bg-gradient-to-br {{ $stat['bg_color'] }} border border-{{ $stat['color'] }}-300">
+                <div class="card shadow-lg bg-gradient-to-br {{ $stat['bg_color'] }} border border-{{ $stat['color'] }}-300 cursor-pointer"
+                    @if ($stat['title'] === 'Total Pasien') onclick="window.location.href='{{ route('pasien') }}'"
+            @elseif($stat['title'] === 'Pemasukan Bulan Ini')
+                onclick="document.getElementById('calendar_modal').showModal()" @endif>
                     <div class="card-body">
                         <h2 class="card-title">{{ $stat['title'] }}</h2>
-                        <p class="text-4xl font-extrabold text-{{ $stat['color'] }}-600">{{ $stat['value'] }}</p>
+                        <p class="text-4xl font-extrabold text-{{ $stat['color'] }}-600"
+                            id="{{ $stat['title'] === 'Pemasukan Bulan Ini' ? 'pemasukan_value' : '' }}">
+                            {{ $stat['value'] }}
+                        </p>
                     </div>
                 </div>
             @endforeach
         </div>
 
+        <dialog id="calendar_modal" class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box bg-neutral text-white">
+                <h3 class="text-lg font-bold text-center">Pilih Tanggal atau Bulan</h3>
+                <div class="mt-3 flex justify-center items-center">
+                    <!-- Kalender -->
+                    <div id="calendar_container" class="flex justify-center"></div>
+                </div>
+
+                <p class="text-center mt-4 font-semibold">
+                    <span id="selected_date" class="text-yellow-400">Tidak ada tanggal yang dipilih</span>
+                </p>
+
+                <div class="modal-action">
+                    <button type="button" onclick="document.getElementById('calendar_modal').close()"
+                        class="btn">Tutup</button>
+                </div>
+            </div>
+        </dialog>
 
         <!-- Grafik dan Informasi -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -74,7 +97,7 @@
                         @endforelse
                     </ul>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <div class="card shadow-lg bg-base-100 border border-base-300">
@@ -154,4 +177,46 @@
             },
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const calendarContainer = document.getElementById('calendar_container');
+            const selectedDateText = document.getElementById('selected_date');
+
+            flatpickr(calendarContainer, {
+                inline: true,
+                dateFormat: "Y-m-d",
+                locale: 'id', // Bahasa Indonesia untuk bulan/hari
+                onChange: function(selectedDates, dateStr) {
+                    selectedDateText.textContent = `Tanggal yang dipilih: ${dateStr}`;
+                    fetchPemasukan(dateStr);
+                }
+            });
+        });
+
+        function fetchPemasukan(date) {
+            const selectedDateText = document.getElementById('selected_date');
+            const pemasukanValueElement = document.getElementById('pemasukan_value');
+
+            selectedDateText.textContent = `Sedang memuat pemasukan...`;
+
+            fetch(`{{ url('/pemasukan/filter') }}?filter_date=${date}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    selectedDateText.textContent = `Tanggal: ${date} - Pemasukan: Rp ${data.pemasukan}`;
+                    // Update nilai pemasukan pada statistik
+                    pemasukanValueElement.textContent = `Rp ${data.pemasukan}`;
+                })
+                .catch(error => {
+                    selectedDateText.textContent = `Gagal memuat pemasukan. Coba lagi.`;
+                    console.error('Fetch error:', error);
+                });
+        }
+    </script>
+
 </x-dashboard.main>

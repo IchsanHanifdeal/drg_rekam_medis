@@ -13,17 +13,17 @@
                     @foreach (['keterangan', 'tanggal', 'jumlah'] as $type)
                         <div class="flex items-center gap-3">
                             <label for="{{ $type }}"
-                                class="text-md font-medium text-gray-900 dark:text-white w-32">
+                                class="text-md font-medium text-white dark:text-white w-32">
                                 {{ ucfirst(str_replace('_', ' ', $type)) }}
                             </label>
                             @if ($type == 'tanggal')
                                 <input type="date" id="{{ $type }}" name="{{ $type }}"
-                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
+                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
                                     value="{{ old($type, date('Y-m-d')) }}" />
                             @elseif ($type == 'jumlah')
                                 <div class="w-full flex-1">
                                     <input type="text" id="{{ $type }}" name="{{ $type }}"
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full"
+                                        class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full"
                                         placeholder="Masukan {{ $type }}..." value=""
                                         oninput="formatRupiah(this)" />
                                     <!-- Input tersembunyi untuk nilai mentah -->
@@ -31,11 +31,11 @@
                                 </div>
                             @elseif ($type == 'keterangan')
                                 <input type="text" id="{{ $type }}" name="nama"
-                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                                     placeholder="Masukan {{ $type }}..." value="" />
                             @else
                                 <input type="text" id="{{ $type }}" name="{{ $type }}"
-                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                                     placeholder="Masukan {{ $type }}..." value="" />
                             @endif
                             @error($type)
@@ -130,21 +130,21 @@
                                                                 @foreach (['nama', 'tanggal', 'jumlah'] as $type)
                                                                     <div class="flex items-center gap-3">
                                                                         <label for="{{ $type }}"
-                                                                            class="text-md font-medium text-gray-900 dark:text-white w-32">
+                                                                            class="text-md font-medium text-white dark:text-white w-32">
                                                                             {{ ucfirst(str_replace('_', ' ', $type)) }}
                                                                         </label>
                                                                         @if ($type == 'tanggal')
                                                                             <input type="date"
                                                                                 id="{{ $type }}"
                                                                                 name="{{ $type }}"
-                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
+                                                                                class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
                                                                                 value="{{ old($type, $item->$type) }}" />
                                                                         @elseif ($type == 'jumlah')
                                                                             <div class="w-full flex-1">
                                                                                 <input type="text"
                                                                                     id="{{ $type }}"
                                                                                     name="{{ $type }}"
-                                                                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full"
+                                                                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full"
                                                                                     placeholder="Masukan {{ $type }}..."
                                                                                     value="{{ old($type, number_format($item->$type, 0, ',', '.')) }}"
                                                                                     oninput="formatRupiah(this)"
@@ -158,14 +158,14 @@
                                                                             <input type="text"
                                                                                 id="{{ $type }}"
                                                                                 name="{{ $type }}"
-                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                                                                class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                                                                                 placeholder="Masukan {{ $type }}..."
                                                                                 value="{{ old($type, $item->nama) }}" />
                                                                         @else
                                                                             <input type="text"
                                                                                 id="{{ $type }}"
                                                                                 name="{{ $type }}"
-                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                                                                class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                                                                                 placeholder="Masukan {{ $type }}..."
                                                                                 value="{{ old($type, $item->$type) }}" />
                                                                         @endif

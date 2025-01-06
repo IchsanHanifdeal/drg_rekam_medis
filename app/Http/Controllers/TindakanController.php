@@ -168,4 +168,14 @@ class TindakanController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
     }
+
+    public function filterAjax(Request $request)
+    {
+        $date = $request->get('filter_date');
+        $pemasukan = Tindakan::whereDate('tanggal', $date)->sum('jumlah');
+
+        return response()->json([
+            'pemasukan' => number_format($pemasukan, 0, ',', '.'),
+        ]);
+    }
 }

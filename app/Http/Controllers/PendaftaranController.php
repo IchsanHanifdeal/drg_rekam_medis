@@ -154,4 +154,11 @@ class PendaftaranController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
     }
+
+    public function pasien()
+    {
+        return view('dashboard.pasien', [
+            'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->get(),
+        ]);
+    }
 }
