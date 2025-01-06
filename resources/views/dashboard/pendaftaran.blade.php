@@ -28,11 +28,11 @@
                                 @if ($type == 'umur')
                                     <div class="flex-1 relative">
                                         <input type="date" id="{{ $type }}" name="{{ $type }}"
-                                            class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
+                                            class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
                                             value="" onchange="calculateAge()" aria-label="Pilih umur" />
 
                                         <input type="text" id="ageInput" name="umur_tampil"
-                                            class="hidden bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
+                                            class="hidden bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
                                             readonly value="{{ old('umur') }}" />
 
                                         <button type="button" id="editAgeButton"
@@ -41,7 +41,7 @@
                                     </div>
                                 @elseif ($type == 'jenis_kelamin')
                                     <select id="{{ $type }}" name="{{ $type }}"
-                                        class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror"
+                                        class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror"
                                         aria-label="Pilih jenis kelamin">
                                         <option value="">Pilih Jenis Kelamin</option>
                                         <option value="laki-laki" {{ old($type) == 'laki-laki' ? 'selected' : '' }}>
@@ -54,7 +54,7 @@
                                 @else
                                     <input type="text" id="{{ $type }}" name="{{ $type }}"
                                         placeholder="Masukkan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-200 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror capitalize"
+                                        class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full flex-1 p-3 @error($type) border-red-500 @enderror capitalize"
                                         value="" aria-label="Masukkan {{ str_replace('_', ' ', $type) }}" />
                                 @endif
 
@@ -194,7 +194,7 @@
                                                                         <!-- Dropdown untuk jenis kelamin -->
                                                                         <select id="{{ $field }}"
                                                                             name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror">
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror">
                                                                             <option value="">Pilih Jenis Kelamin
                                                                             </option>
                                                                             <option value="laki-laki"
@@ -209,7 +209,7 @@
                                                                     @else
                                                                         <input type="text" id="{{ $field }}"
                                                                             name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
                                                                             value="{{ old($field, $item->$field) }}" />
                                                                     @endif
 

@@ -74,7 +74,7 @@
                                                                         <!-- Dropdown untuk jenis kelamin -->
                                                                         <select id="{{ $field }}"
                                                                             name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror">
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror">
                                                                             <option value="">Pilih Jenis Kelamin
                                                                             </option>
                                                                             <option value="laki-laki"
@@ -89,7 +89,7 @@
                                                                     @else
                                                                         <input type="text" id="{{ $field }}"
                                                                             name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
                                                                             value="{{ old($field, $item->$field) }}" />
                                                                     @endif
 
@@ -143,6 +143,65 @@
                                                     </div>
                                                 </div>
                                             </dialog>
+                                            <x-lucide-eye class="size-5 hover:stroke-yellow-500 cursor-pointer"
+                                                onclick="document.getElementById('detail_modal_{{ $item->id }}').showModal();" />
+
+                                            <dialog id="detail_modal_{{ $item->id }}"
+                                                class="modal modal-bottom sm:modal-middle">
+                                                <div class="modal-box w-screen max-w-screen-xl bg-neutral" style="max-width: 1900px">
+                                                    <h3 class="font-bold text-lg text-primary">Riwayat Tindakan Pasien
+                                                    </h3>
+                                                    <p class="py-4 text-base-100">Berikut adalah detail riwayat tindakan
+                                                        yang telah dilakukan kepada pasien:
+                                                        <strong>{{ $item->nama }}</strong></p>
+
+                                                    <!-- Table Riwayat Tindakan -->
+                                                    <div class="overflow-x-auto">
+                                                        <table class="table w-full text-white">
+                                                            <thead class="text-sm text-center">
+                                                                <tr class="text-white">
+                                                                    <th>Tanggal</th>
+                                                                    <th>Tensi Darah</th>
+                                                                    <th>Berat Badan</th>
+                                                                    <th>Biaya</th>
+                                                                    <th>Opsi Tindakan</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($tindakan as $index => $data)
+                                                                    @if ($data->pendaftaran === $item->id)
+                                                                        <tr>
+                                                                            <td
+                                                                                class="font-semibold capitalize text-center">
+                                                                                {{ $data->tanggal }}</td>
+                                                                            <td
+                                                                                class="font-semibold capitalize text-center">
+                                                                                {{ $data->tensi_darah }}</td>
+                                                                            <td
+                                                                                class="font-semibold capitalize text-center">
+                                                                                {{ $data->berat_badan }} kg</td>
+                                                                            <td
+                                                                                class="font-semibold capitalize text-center">
+                                                                                {{ $data->biaya ? 'Rp' . number_format($data->biaya, 0, ',', '.') : '-' }}
+                                                                            </td>
+                                                                            <td
+                                                                                class="font-semibold capitalize text-center">
+                                                                                {{ $data->opsi->nama }}</td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <!-- Tombol Tindakan -->
+                                                    <div class="modal-action">
+                                                        <button class="btn btn-primary"
+                                                            onclick="document.getElementById('detail_modal_{{ $item->id }}').close();">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </dialog>
+
                                         </td>
                                     </tr>
                                 @empty

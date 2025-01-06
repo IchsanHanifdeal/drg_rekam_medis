@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pendaftaran;
+use App\Models\Tindakan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -159,6 +160,7 @@ class PendaftaranController extends Controller
     {
         return view('dashboard.pasien', [
             'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->get(),
+            'tindakan' => Tindakan::all(),
         ]);
     }
 }

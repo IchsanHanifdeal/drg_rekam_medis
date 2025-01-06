@@ -14,7 +14,7 @@
                         <label for="pasien"
                             class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
                         <select id="pasien" name="pasien"
-                            class="searchable-select bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
+                            class="searchable-select bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
                             <option value="">Pilih Pasien</option>
                         </select>
                         @error('pasien')
@@ -30,16 +30,16 @@
                             </label>
                             @if ($type == 'tanggal')
                                 <input type="date" id="{{ $type }}" name="{{ $type }}"
-                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
                                     value="{{ old($type, date('Y-m-d')) }}" />
                             @elseif ($type == 'TD/BB')
                                 <div class="flex items-center gap-1 flex-1">
                                     <input type="number" id="td" name="td" placeholder="Masukan TD..."
-                                        class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
+                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
                                         value="{{ old('td') }}" />
                                     <span class="text-white">/</span>
                                     <input type="number" id="bb" name="bb" placeholder="Masukan BB..."
-                                        class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
+                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
                                         value="{{ old('bb') }}" />
                                 </div>
                             @endif
@@ -53,7 +53,7 @@
                         <label for="tindakan"
                             class="text-md font-medium text-white dark:text-white w-32">Tindakan</label>
                         <select id="tindakan" name="tindakan"
-                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
+                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
                             <option value="">Pilih Tindakan</option>
                             @foreach (\App\Models\OpsiTindakan::all() as $opsi)
                                 <option value="{{ $opsi->id }}"
@@ -71,7 +71,7 @@
                         <label for="biaya"
                             class="text-md font-medium text-white dark:text-white w-32">Biaya</label>
                         <input type="text" id="biaya" name="formatted_biaya"
-                            class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                             placeholder="Masukan Biaya..." value="{{ old('formatted_biaya') }}"
                             oninput="formatRupiah(this)" />
                         <input type="hidden" id="biaya_raw" name="biaya" value="{{ old('biaya') }}" />
@@ -210,7 +210,7 @@
                                                                         class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
                                                                     <select id="pasien_{{ $item->id }}"
                                                                         name="pasien"
-                                                                        class="searchable-select bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
+                                                                        class="searchable-select bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
                                                                         <option value="">Pilih Pasien</option>
                                                                         @foreach (\App\Models\Pendaftaran::all() as $pasien)
                                                                             <option value="{{ $pasien->id }}"
@@ -236,7 +236,7 @@
                                                                             <input type="date"
                                                                                 id="{{ $type }}_{{ $item->id }}"
                                                                                 name="{{ $type }}"
-                                                                                class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
+                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
                                                                                 value="{{ old($type, $item->tanggal) }}" />
                                                                         @elseif ($type == 'TD/BB')
                                                                             <div
@@ -245,14 +245,14 @@
                                                                                     id="td_{{ $item->id }}"
                                                                                     name="td"
                                                                                     placeholder="Masukan TD..."
-                                                                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
+                                                                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
                                                                                     value="{{ old('td', $item->tensi_darah) }}" />
                                                                                 <span class="text-white">/</span>
                                                                                 <input type="number"
                                                                                     id="bb_{{ $item->id }}"
                                                                                     name="bb"
                                                                                     placeholder="Masukan BB..."
-                                                                                    class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
+                                                                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
                                                                                     value="{{ old('bb', $item->berat_badan) }}" />
                                                                             </div>
                                                                         @endif
@@ -268,7 +268,7 @@
                                                                         class="text-md font-medium text-white dark:text-white w-32">Tindakan</label>
                                                                     <select id="tindakan_{{ $item->id }}"
                                                                         name="tindakan"
-                                                                        class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
+                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
                                                                         <option value="">Pilih Tindakan</option>
                                                                         @foreach (\App\Models\OpsiTindakan::all() as $opsi)
                                                                             <option value="{{ $opsi->id }}"
@@ -289,7 +289,7 @@
                                                                     <input type="text"
                                                                         id="biaya_{{ $item->id }}"
                                                                         name="formatted_biaya"
-                                                                        class="bg-gray-300 border border-gray-300 text-white rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                                                                         placeholder="Masukan Biaya..."
                                                                         value="{{ old('formatted_biaya', $item->biaya) }}"
                                                                         oninput="formatRupiah(this)" />
