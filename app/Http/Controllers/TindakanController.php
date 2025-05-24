@@ -16,7 +16,7 @@ class TindakanController extends Controller
     public function index()
     {
         return view('dashboard.tindakan', [
-            'tindakan' => Tindakan::orderBy('created_at', 'desc')->get(),
+            'tindakan' => Tindakan::orderBy('created_at', 'desc')->paginate('10'),
         ]);
     }
 

@@ -149,7 +149,7 @@
                                 @forelse ($pendaftaran as $i => $item)
                                     <tr>
                                         <th class="font-semibold capitalize text-center">
-                                            {{ $i + 1 }}</th>
+                                            {{ $pendaftaran->firstItem() + $i }}</th>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->nomor_rekam_medis }}</td>
                                         <td class="font-semibold capitalize text-center">
@@ -274,6 +274,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-4 flex justify-center">
+                            {{ $pendaftaran->links('vendor.pagination') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,27 +288,27 @@
         const tableRows = dataTable.querySelectorAll('tbody tr');
         const noDataRow = document.createElement('tr');
         const noDataCell = document.createElement('td');
-        
+
         noDataCell.colSpan = tableRows[0].cells.length;
         noDataCell.textContent = 'Data tidak ditemukan';
         noDataRow.appendChild(noDataCell);
-        
+
         searchInput.addEventListener('keyup', function() {
             const query = searchInput.value.toLowerCase();
             let rowVisible = false;
-        
+
             tableRows.forEach(row => {
                 let rowMatch = false;
-        
+
                 for (let i = 0; i < row.cells.length; i++) {
                     const cellText = row.cells[i].textContent.toLowerCase();
-                    
+
                     if (cellText.includes(query)) {
                         rowMatch = true;
                         break;
                     }
                 }
-        
+
                 if (rowMatch) {
                     row.style.display = '';
                 } else {
@@ -313,7 +316,7 @@
                 }
                 rowVisible = rowVisible || rowMatch;
             });
-        
+
             if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
                 noDataRow.setAttribute('data-no-data', 'true');
                 dataTable.querySelector('tbody').appendChild(noDataRow);
@@ -322,5 +325,5 @@
             }
         });
     </script>
-    
+
 </x-dashboard.main>

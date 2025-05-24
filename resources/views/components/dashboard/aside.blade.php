@@ -12,37 +12,38 @@
             </div>
 
             <li class="my-2">
-                <a href="{{ route('dashboard') }}" class="{!! Request::path() == '/' ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                <a href="{{ route('dashboard') }}"
+                    class="{{ Request::path() == 'dashboard' ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-bar-chart-2 /> Dashboard
                 </a>
             </li>
             <li class="my-2">
                 <a href="{{ route('pendaftaran') }}"
-                    class="{!! preg_match('#^pendaftaran.*#', Request::path()) ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                    class="{{ Str::startsWith(Request::path(), 'dashboard/pendaftaran') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-user-plus /> Pendaftaran
                 </a>
             </li>
             <li class="my-2">
                 <a href="{{ route('tindakan') }}"
-                    class="{!! preg_match('#^tindakan.*#', Request::path()) ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                    class="{{ Str::startsWith(Request::path(), 'dashboard/tindakan') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-stethoscope /> Tindakan
                 </a>
             </li>
             {{-- <li class="my-2">
                 <a href="{{ route('opsi_tindakan') }}"
-                    class="{!! preg_match('#^opsi_tindakan.*#', Request::path()) ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                    class="{{ Str::startsWith(Request::path(), 'opsi_tindakan') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-stethoscope /> Opsi Tindakan
                 </a>
             </li> --}}
             <li class="my-2">
                 <a href="{{ route('pengeluaran') }}"
-                    class="{!! preg_match('#^pengeluaran.*#', Request::path()) ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                    class="{{ Str::startsWith(Request::path(), 'dashboard/pengeluaran') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-dollar-sign /> Pengeluaran
                 </a>
             </li>
             <li class="my-2">
-                <a href="{{ route('laporan') }}" 
-                    class="{!! preg_match('#^laporan.*#', Request::path()) ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' !!} flex items-center px-2.5 font-semibold">
+                <a href="{{ route('laporan') }}"
+                    class="{{ Str::startsWith(Request::path(), 'dashboard/laporan') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-clipboard-list /> Laporan
                 </a>
             </li>

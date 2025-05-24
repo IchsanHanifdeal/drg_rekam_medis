@@ -11,8 +11,7 @@
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     <div class="flex items-center gap-3">
-                        <label for="pasien"
-                            class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
+                        <label for="pasien" class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
                         <select id="pasien" name="pasien"
                             class="searchable-select bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
                             <option value="">Pilih Pasien</option>
@@ -68,8 +67,7 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <label for="biaya"
-                            class="text-md font-medium text-white dark:text-white w-32">Biaya</label>
+                        <label for="biaya" class="text-md font-medium text-white dark:text-white w-32">Biaya</label>
                         <input type="text" id="biaya" name="formatted_biaya"
                             class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                             placeholder="Masukan Biaya..." value="{{ old('formatted_biaya') }}"
@@ -174,13 +172,13 @@
                                 @forelse ($tindakan as $i => $item)
                                     <tr>
                                         <th class="font-semibold capitalize text-center">
-                                            {{ $i + 1 }}</th>
+                                            {{ $tindakan->firstItem() + $i }}</th>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->pendaftarans->nomor_rekam_medis }}</td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->pendaftarans->nama }}</td>
                                         <td class="font-semibold capitalize text-center">
-                                            {{ $item->tanggal? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY'): '-' }}
+                                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->tensi_darah . '/' . $item->berat_badan . 'kg' }}</td>
                                         </td>
@@ -356,6 +354,9 @@
                                     </tr>
                                 @endforelse
                         </table>
+                        <div class="mt-4">
+                            {{ $tindakan->links('vendor.pagination') }}
+                        </div>
                     </div>
                 </div>
             </div>

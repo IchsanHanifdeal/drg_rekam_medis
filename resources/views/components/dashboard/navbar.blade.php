@@ -16,7 +16,48 @@
             </button>
             <ul class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40">
                 <li><a href="{{ route('opsi_tindakan') }}" class="text-base">Tambah Tindakan</a></li>
+                <li><a href="{{ route('profile') }}" class="text-base">Pengaturan Akun</a></li>
+                <li>
+                    <button type="button" id="logoutButton" class="text-base">
+                        <span>Logout</span>
+                    </button>
+                </li>
             </ul>
         </div>
     </div>
 </div>
+
+<!-- Logout Modal -->
+<dialog id="logoutModal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box bg-[#eae3cd] text-[#333333] border border-[#aa8f55] shadow-xl rounded-xl">
+        <h3 class="text-lg font-bold capitalize text-center">Konfirmasi Logout</h3>
+
+        <div class="mt-3 text-sm sm:text-base">
+            <p class="text-center">
+                Anda yakin ingin keluar dari akun ini? Semua sesi yang belum disimpan akan hilang.
+            </p>
+        </div>
+
+        <div class="modal-action flex justify-between mt-6">
+            <button type="button" onclick="document.getElementById('logoutModal').close()"
+                class="btn bg-white hover:bg-yellow-400 text-[#333333] border border-[#aa8f55]">
+                Batal
+            </button>
+
+            <form action="{{ route('logout') }}" method="POST" class="inline-block">
+                @csrf
+                <button type="submit" class="btn bg-[#aa8f55] hover:bg-[#9a7e44] text-white shadow-md"
+                    onclick="closeAllModals(event)">
+                    Keluar
+                </button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    // Open logout modal when logout button is clicked
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        document.getElementById('logoutModal').showModal();
+    });
+</script>

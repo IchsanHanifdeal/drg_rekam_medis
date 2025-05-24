@@ -19,7 +19,7 @@ class PendaftaranController extends Controller
         $newNumber = $this->findAvailableNomor($existingNumbers);
 
         return view('dashboard.pendaftaran', [
-            'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->get(),
+            'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->paginate('10'),
             'nomor_rekam_medis' => $newNumber,
         ]);
     }
@@ -86,9 +86,9 @@ class PendaftaranController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pendaftaran $pendaftaran)
+    public function setting()
     {
-        //
+        return view('dashboard.profile');
     }
 
     /**

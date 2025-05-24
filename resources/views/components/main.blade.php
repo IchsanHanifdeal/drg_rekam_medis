@@ -43,7 +43,7 @@
             <div class="relative flex flex-col items-center justify-center p-8 bg-slate-200 rounded-lg shadow-lg">
                 <!-- Loading Animation -->
                 <div class="flex items-center space-x-2">
-                    <img src="{{ asset('image/logo.png') }}" alt="Logo Sioner" class="mr-2 animated-logo">
+                    <img src="{{asset('image/logo.png')}}" alt="Logo Sioner" class="mr-2 animated-logo">
                 </div>
                 <!-- Logo and Branding -->
                 <div class="mt-6 flex flex-col items-center">
