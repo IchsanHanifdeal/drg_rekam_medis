@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Keuangan</title>
     <!-- Link DaisyUI and Tailwind CSS -->
+    <meta http-equiv="refresh" content="5;url={{ route('laporan') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/daisyui@2.40.0/dist/full.js"></script>
     <style>
@@ -78,7 +79,7 @@
             </div>
             <div class="font-bold text-lg">
                 <p>
-                    <span class="text-blue-500">Total Keuntungan: </span> 
+                    <span class="text-blue-500">Total Keuntungan: </span>
                     <span class="{{ $totalPemasukan >= $totalPengeluaran ? 'text-green-600' : 'text-red-600' }}">
                         {{ 'Rp. ' . number_format($totalPemasukan - $totalPengeluaran, 0, ',', '.') }}
                     </span>

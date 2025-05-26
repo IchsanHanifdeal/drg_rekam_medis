@@ -12,17 +12,28 @@ class PendaftaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $existingNumbers = Pendaftaran::pluck('nomor_rekam_medis')->toArray();
+        $searchTerm = $request->input('nama');
 
+        $existingNumbers = Pendaftaran::pluck('nomor_rekam_medis')->toArray();
         $newNumber = $this->findAvailableNomor($existingNumbers);
 
+        $pendaftaranQuery = Pendaftaran::query();
+
+        if ($searchTerm) {
+            $pendaftaranQuery->where('nama', 'like', '%' . $searchTerm . '%');
+        }
+
+        $pendaftarans = $pendaftaranQuery->orderBy('created_at', 'desc')->paginate(10);
+        $pendaftarans->appends(['nama' => $searchTerm]);
+
         return view('dashboard.pendaftaran', [
-            'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->paginate('10'),
+            'pendaftaran' => $pendaftarans,
             'nomor_rekam_medis' => $newNumber,
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -156,10 +167,22 @@ class PendaftaranController extends Controller
         }
     }
 
-    public function pasien()
+    public function pasien(Request $request)
     {
+        $searchTerm = $request->input('nama');
+
+        $pendaftaranQuery = Pendaftaran::query();
+
+        if ($searchTerm) {
+            $pendaftaranQuery->where('nama', 'like', '%' . $searchTerm . '%');
+        }
+
+        $pendaftarans = $pendaftaranQuery->orderBy('created_at', 'desc')->paginate(10);
+
+        $pendaftarans->appends(['nama' => $searchTerm]);
+
         return view('dashboard.pasien', [
-            'pendaftaran' => Pendaftaran::orderBy('created_at', 'desc')->get(),
+            'pendaftaran' => $pendaftarans,
             'tindakan' => Tindakan::all(),
         ]);
     }

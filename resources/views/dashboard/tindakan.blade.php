@@ -153,10 +153,14 @@
                         Jelajahi dan ketahui Tindakan.
                     </p>
                 </div>
-                <div class="w-full px-5 sm:px-7 bg-neutral my-4">
-                    <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
-                </div>
+                <form action="{{ route('tindakan') }}" method="GET" class="w-full">
+                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                        <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
+                            value="{{ request('nama') }}"
+                            class="input input-sm shadow-md w-full bg-neutral text-white">
+                    </div>
+                </form>
+
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
                         <table class="table w-full text-white" id="dataTable">

@@ -10,10 +10,12 @@
                         Jelajahi dan ketahui pasien.
                     </p>
                 </div>
-                <div class="w-full px-5 sm:px-7 bg-neutral my-4">
-                    <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
-                </div>
+                <form action="{{ route('pasien') }}" method="GET" class="w-full">
+                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                        <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
+                            value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
+                    </div>
+                </form>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
                         <table class="table w-full text-white" id="dataTable">
@@ -148,12 +150,14 @@
 
                                             <dialog id="detail_modal_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box w-screen max-w-screen-xl bg-neutral" style="max-width: 1900px">
+                                                <div class="modal-box w-screen max-w-screen-xl bg-neutral"
+                                                    style="max-width: 1900px">
                                                     <h3 class="font-bold text-lg text-primary">Riwayat Tindakan Pasien
                                                     </h3>
                                                     <p class="py-4 text-base-100">Berikut adalah detail riwayat tindakan
                                                         yang telah dilakukan kepada pasien:
-                                                        <strong>{{ $item->nama }}</strong></p>
+                                                        <strong>{{ $item->nama }}</strong>
+                                                    </p>
 
                                                     <!-- Table Riwayat Tindakan -->
                                                     <div class="overflow-x-auto">
@@ -212,52 +216,12 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-4 flex justify-center">
+                            {{ $pendaftaran->links('vendor.pagination') }}
+                        </div>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const dataTable = document.getElementById('dataTable');
-        const tableRows = dataTable.querySelectorAll('tbody tr');
-        const noDataRow = document.createElement('tr');
-        const noDataCell = document.createElement('td');
-
-        noDataCell.colSpan = tableRows[0].cells.length;
-        noDataCell.textContent = 'Data tidak ditemukan';
-        noDataRow.appendChild(noDataCell);
-
-        searchInput.addEventListener('keyup', function() {
-            const query = searchInput.value.toLowerCase();
-            let rowVisible = false;
-
-            tableRows.forEach(row => {
-                let rowMatch = false;
-
-                for (let i = 0; i < row.cells.length; i++) {
-                    const cellText = row.cells[i].textContent.toLowerCase();
-
-                    if (cellText.includes(query)) {
-                        rowMatch = true;
-                        break;
-                    }
-                }
-
-                if (rowMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-                rowVisible = rowVisible || rowMatch;
-            });
-
-            if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
-                noDataRow.setAttribute('data-no-data', 'true');
-                dataTable.querySelector('tbody').appendChild(noDataRow);
-            } else if (rowVisible && dataTable.querySelector('tbody tr[data-no-data]')) {
-                dataTable.querySelector('tbody tr[data-no-data]').remove();
-            }
-        });
-    </script>
 </x-dashboard.main>

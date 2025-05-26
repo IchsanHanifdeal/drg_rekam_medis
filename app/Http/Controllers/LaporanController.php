@@ -7,7 +7,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Models\Laporan;
 use App\Models\Tindakan;
-use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\PDF;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use App\Exports\LaporanExport;
@@ -65,47 +65,35 @@ class LaporanController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $pemasukan = Tindakan::query();
-        $pengeluaran = Pengeluaran::query();
+        $pemasukanQuery = Tindakan::query();
+        $pengeluaranQuery = Pengeluaran::query();
 
-        // Filter data
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $pemasukan->whereBetween('tanggal', [$request->start_date, $request->end_date]);
-            $pengeluaran->whereBetween('tanggal', [$request->start_date, $request->end_date]);
+            $pemasukanQuery->whereBetween('tanggal', [$request->start_date, $request->end_date]);
+            $pengeluaranQuery->whereBetween('tanggal', [$request->start_date, $request->end_date]);
         }
 
         if ($request->filled('range')) {
             $range = $request->range == '7_days' ? 7 : 30;
-            $pemasukan->where('tanggal', '>=', now()->subDays($range));
-            $pengeluaran->where('tanggal', '>=', now()->subDays($range));
+            $pemasukanQuery->where('tanggal', '>=', now()->subDays($range));
+            $pengeluaranQuery->where('tanggal', '>=', now()->subDays($range));
         }
 
+        $pemasukan = $pemasukanQuery->get();
+        $pengeluaran = $pengeluaranQuery->get();
+
         $data = [
-            'pemasukan' => $pemasukan->get(),
-            'pengeluaran' => $pengeluaran->get(),
+            'pemasukan' => $pemasukan,
+            'pengeluaran' => $pengeluaran,
             'totalPemasukan' => $pemasukan->sum('biaya'),
             'totalPengeluaran' => $pengeluaran->sum('jumlah'),
         ];
 
-        // Render view secara manual
-        $html = view('vendor.pdf_laporan', $data)->render();
+        $filename = 'laporan-keuangan-' . now()->format('YmdHis') . '.pdf';
+        $pdf = Pdf::loadView('vendor.pdf_laporan', $data)->setPaper('A4', 'portrait');
+        $pdf->save(storage_path("app/public/{$filename}"));
 
-        // Konfigurasi DomPDF
-        $options = new Options();
-        $options->set('defaultFont', 'Arial');
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        // Download PDF langsung tanpa menyimpannya
-        return response($dompdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="laporan-keuangan.pdf"',
-        ]);
+        return redirect()->route('laporan.download.pdf', ['filename' => $filename]);
     }
 
     public function exportExcel(Request $request)

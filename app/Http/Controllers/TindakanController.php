@@ -13,10 +13,23 @@ class TindakanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $searchTerm = $request->input('nama');
+
+        $tindakanQuery = Tindakan::with('pendaftarans');
+
+        if ($searchTerm) {
+            $tindakanQuery->whereHas('pendaftarans', function ($query) use ($searchTerm) {
+                $query->where('nama', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        $tindakan = $tindakanQuery->orderBy('created_at', 'desc')->paginate(10);
+        $tindakan->appends(['nama' => $searchTerm]);
+
         return view('dashboard.tindakan', [
-            'tindakan' => Tindakan::orderBy('created_at', 'desc')->paginate('10'),
+            'tindakan' => $tindakan,
         ]);
     }
 

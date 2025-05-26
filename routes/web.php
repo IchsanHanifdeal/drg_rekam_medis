@@ -52,7 +52,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/dashboard/opsi_tindakan/{id}/delete', [OpsiTindakanController::class, 'destroy'])->name('delete.opsi_tindakan');
 
     Route::get('/dashboard/laporan', [LaporanController::class, 'index'])->name('laporan');
-    Route::get('/dashboard/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
+    Route::get('/dashboard/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
+
+    // Untuk mendownload PDF yang sudah dibuat
+    Route::get('/dashboard/laporan/download-pdf/{filename}', function ($filename) {
+        return view('vendor.download_pdf', ['filename' => $filename]);
+    })->name('laporan.download.pdf');
     Route::get('/dashboard/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
 
     Route::get('/dashboard/pasien', [PendaftaranController::class, 'pasien'])->name('pasien');

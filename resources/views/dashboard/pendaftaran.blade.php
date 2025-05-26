@@ -27,9 +27,10 @@
 
                                 @if ($type == 'umur')
                                     <div class="flex-1 relative">
-                                        <input type="date" id="{{ $type }}" name="{{ $type }}"
+                                        <input type="date" id="umur" name="umur"
                                             class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
-                                            value="" onchange="calculateAge()" aria-label="Pilih umur" />
+                                            value="" aria-label="Pilih umur" />
+
 
                                         <input type="text" id="ageInput" name="umur_tampil"
                                             class="hidden bg-gray-200 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 @error($type) border-red-500 @enderror"
@@ -74,11 +75,26 @@
             </form>
 
             <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const dateInput = document.getElementById("umur");
+
+                    dateInput.addEventListener("keydown", function(event) {
+                        if (event.key === "Enter") {
+                            event.preventDefault(); // Hindari submit form jika ada
+                            calculateAge();
+                        }
+                    });
+                });
+
                 function calculateAge() {
-                    const birthDate = new Date(document.getElementById('umur').value);
+                    const birthDateStr = document.getElementById('umur').value;
+
+                    if (!birthDateStr || birthDateStr.length < 10) return;
+
+                    const birthDate = new Date(birthDateStr);
                     const currentDate = new Date();
 
-                    if (!birthDate.getTime()) return;
+                    if (isNaN(birthDate.getTime())) return;
 
                     let years = currentDate.getFullYear() - birthDate.getFullYear();
                     let months = currentDate.getMonth() - birthDate.getMonth();
@@ -90,7 +106,7 @@
                     }
 
                     if (days < 0) {
-                        const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0);
+                        const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
                         days += lastMonth.getDate();
                     }
 
@@ -115,6 +131,7 @@
                     calculateAge();
                 }
             </script>
+
         </div>
     </div>
 
@@ -130,10 +147,13 @@
                         Jelajahi dan ketahui pasien.
                     </p>
                 </div>
-                <div class="w-full px-5 sm:px-7 bg-neutral my-4">
-                    <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
-                </div>
+                <form action="{{ route('pendaftaran') }}" method="GET" class="w-full">
+                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                        <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
+                            value="{{ request('nama') }}"
+                            class="input input-sm shadow-md w-full bg-neutral text-white">
+                    </div>
+                </form>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
                         <table class="table w-full text-white" id="dataTable">
@@ -207,7 +227,8 @@
                                                                             </option>
                                                                         </select>
                                                                     @else
-                                                                        <input type="text" id="{{ $field }}"
+                                                                        <input type="text"
+                                                                            id="{{ $field }}"
                                                                             name="{{ $field }}"
                                                                             class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
                                                                             value="{{ old($field, $item->$field) }}" />
@@ -282,48 +303,4 @@
             </div>
         @endforeach
     </div>
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const dataTable = document.getElementById('dataTable');
-        const tableRows = dataTable.querySelectorAll('tbody tr');
-        const noDataRow = document.createElement('tr');
-        const noDataCell = document.createElement('td');
-
-        noDataCell.colSpan = tableRows[0].cells.length;
-        noDataCell.textContent = 'Data tidak ditemukan';
-        noDataRow.appendChild(noDataCell);
-
-        searchInput.addEventListener('keyup', function() {
-            const query = searchInput.value.toLowerCase();
-            let rowVisible = false;
-
-            tableRows.forEach(row => {
-                let rowMatch = false;
-
-                for (let i = 0; i < row.cells.length; i++) {
-                    const cellText = row.cells[i].textContent.toLowerCase();
-
-                    if (cellText.includes(query)) {
-                        rowMatch = true;
-                        break;
-                    }
-                }
-
-                if (rowMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-                rowVisible = rowVisible || rowMatch;
-            });
-
-            if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
-                noDataRow.setAttribute('data-no-data', 'true');
-                dataTable.querySelector('tbody').appendChild(noDataRow);
-            } else if (rowVisible && dataTable.querySelector('tbody tr[data-no-data]')) {
-                dataTable.querySelector('tbody tr[data-no-data]').remove();
-            }
-        });
-    </script>
-
 </x-dashboard.main>
