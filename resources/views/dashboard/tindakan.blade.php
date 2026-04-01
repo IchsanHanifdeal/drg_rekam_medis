@@ -1,7 +1,7 @@
 <x-dashboard.main title="Tindakan">
     <!-- TAMBAH TINDAKAN FORM -->
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7 bg-white">
             <h1 class="text-black font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Tindakan
             </h1>
@@ -59,7 +59,7 @@
                                 <input type="text" id="display_tooth" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3" placeholder="Pilih Gigi di Peta..." readonly />
                                 <input type="text" id="display_surface" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3" placeholder="Permukaan..." readonly />
                             </div>
-                            <select name="condition_code" id="condition_code" onchange="window.dispatchEvent(new CustomEvent('condition-code-changed', { detail: this.value }))" class="bg-gray-300 border border-red-300 text-red-900 rounded-lg focus:ring-red-500 p-2.5 flex-1 font-semibold">
+                            <select name="condition_code" id="condition_code" onchange="window.dispatchEvent(new CustomEvent('condition-code-changed', { detail: this.value }))" class="bg-gray-300 border border-red-300 rounded-lg focus:ring-red-500 p-2.5 flex-1 font-semibold">
                                 <option value="" selected>Kondisi Gigi (Opsional)</option>
                                 <option value="karies">Karies</option>
                                 <option value="restorasi">Restorasi</option>
@@ -103,7 +103,7 @@
 
                 <div class="flex gap-3 justify-end mt-4">
                     <button type="reset" class="btn border-none text-black hover:bg-neutral-focus">Reset</button>
-                    <button type="submit" class="btn btn-primary border-none text-black hover:bg-[#c97433]">Simpan</button>
+                    <button type="submit" class="btn border-none text-white" style="background-color: {{ $web_config->theme_colors['accent'] }};">Simpan</button>
                 </div>
             </form>
         </div>
@@ -136,8 +136,8 @@
          }"
          @tooth-surface-clicked.window="toggleSelection($event.detail.tooth, $event.detail.surface, $event.detail.surfaceName)"
     >
-        <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-            <div class="p-5 sm:p-7 rounded-t-xl border-b border-white/10" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+        <div class="flex flex-col border-back rounded-xl w-full bg-white">
+            <div class="p-5 sm:p-7 rounded-t-xl border-b border-white/10 bg-white">
                 <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
                     Peta Gigi (Odontogram)
                 </h1>
@@ -158,7 +158,7 @@
                 </div>
             </div>
 
-            <div class="p-5 sm:p-7 flex justify-center pb-12 overflow-x-auto w-full rounded-b-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <div class="p-5 sm:p-7 flex justify-center pb-12 overflow-x-auto w-full rounded-b-xl bg-white">
                 <div class="flex flex-col items-center min-w-[700px] mx-auto relative px-4 text-gray-800">
                     
                     <div class="flex flex-col gap-8 w-full border-b border-gray-300 pb-12 relative pt-4">
@@ -232,8 +232,8 @@
     <!-- DATA TINDAKAN SECTION -->
     <div class="flex gap-5 mt-5">
         @foreach (['data_tindakan'] as $item)
-            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <div class="flex flex-col border-back rounded-xl w-full bg-white">
+                <div class="p-5 sm:p-7 rounded-t-xl bg-white">
                     <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
@@ -242,121 +242,108 @@
                     </p>
                 </div>
                 <form action="{{ route('tindakan') }}" method="GET" class="w-full">
-                    <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                    <div class="w-full px-5 sm:px-7 my-4">
                         <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
                             value="{{ request('nama') }}"
-                            class="input input-sm shadow-md w-full text-black border-white/20" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                            class="input input-sm shadow-md w-full text-black border-white/20">
                     </div>
                 </form>
 
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y divide-white/10 pt-0 p-5 sm:p-7">
-                    <div class="overflow-x-auto">
-                        <table class="table w-full text-black" id="dataTable">
-                            <thead class="text-sm">
-                                <tr class="text-black border-b border-white/20">
-                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'hari/tanggal', 'TD/BB', 'Gigi/Bagian', 'Tindakan', 'biaya', 'Aksi'] as $header)
-                                        <th class="uppercase font-bold text-center">{{ $header }}</th>
+                    <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm w-full">
+                        <table class="w-full text-sm text-center border-collapse" id="dataTable">
+                            <thead class="text-white" style="background-color: {{ $web_config->theme_colors['accent'] }};">
+                                <tr>
+                                    @foreach (['No', 'No. RM', 'Nama', 'Hari/Tanggal', 'TD/BB', 'Gigi/Bagian', 'Tindakan', 'Biaya', 'Aksi'] as $header)
+                                        <th class="py-3 px-4 font-bold uppercase tracking-wider border-r border-white/30 last:border-r-0">
+                                            {{ $header }}
+                                        </th>
                                     @endforeach
                                 </tr>
                             </thead>
-                            <tbody>
+                            
+                            <tbody class="bg-white">
                                 @forelse ($tindakan as $i => $item)
-                                    <tr class="border-b border-white/10">
-                                        <th class="font-semibold capitalize text-center">
-                                            {{ $tindakan->firstItem() + $i }}</th>
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->pendaftarans->nomor_rekam_medis }}</td>
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->pendaftarans->nama }}</td>
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}</td>
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->tensi_darah . '/' . $item->berat_badan . 'kg' }}
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                                        <td class="py-3 px-4 font-semibold text-gray-800 border-r border-gray-200">
+                                            {{ $tindakan->firstItem() + $i }}
                                         </td>
-                                        <td class="font-semibold capitalize text-center text-primary">
-                                            {{ $item->tooth_number ? 'Gigi '.$item->tooth_number : '-' }}
+                                        <td class="py-3 px-4 font-semibold text-gray-800 border-r border-gray-200">
+                                            {{ $item->pendaftarans->nomor_rekam_medis }}
                                         </td>
-                                        <td class="font-semibold capitalize text-center">
+                                        <td class="py-3 px-4 font-semibold text-gray-800 capitalize border-r border-gray-200">
+                                            {{ $item->pendaftarans->nama }}
+                                        </td>
+                                        <td class="py-3 px-4 font-semibold text-gray-800 border-r border-gray-200">
+                                            {{-- Pindahin ini ke Model Accessor: $item->tanggal_formatted --}}
+                                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}
+                                        </td>
+                                        <td class="py-3 px-4 font-semibold text-gray-800 border-r border-gray-200">
+                                            {{ $item->tensi_darah }}/{{ $item->berat_badan }}kg
+                                        </td>
+                                        <td class="py-3 px-4 font-semibold border-r border-gray-200">
+                                            {{ $item->tooth_number ? 'Gigi ' . $item->tooth_number : '-' }}
+                                        </td>
+                                        <td class="py-3 px-4 font-semibold text-gray-800 capitalize border-r border-gray-200">
                                             {{ $item->opsi->nama ?? '-' }}
                                         </td>
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->biaya ? 'Rp' . number_format($item->biaya, 0, ',', '.') : '-' }}
+                                        <td class="py-3 px-4 font-semibold text-gray-800 border-r border-gray-200">
+                                            {{ $item->biaya ? 'Rp ' . number_format($item->biaya, 0, ',', '.') : '-' }}
                                         </td>
-                                        <td class="flex items-center gap-4 justify-center">
-                                            <x-lucide-pencil class="size-5 hover:stroke-yellow-500 cursor-pointer"
-                                                onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
-                                            <dialog id="update_modal_{{ $item->id }}"
-                                                class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral text-black border border-back">
-                                                    <h3 class="text-lg font-bold">Update Tindakan</h3>
-                                                    <div class="mt-3">
-                                                        <form method="POST"
-                                                            action="{{ route('update.tindakan', $item->id) }}"
-                                                            enctype="multipart/form-data">
+                                        <td class="py-3 px-4 border border-gray-300">
+                                            <div class="flex items-center justify-center gap-3">
+                                                <x-lucide-pencil class="size-5 stroke-yellow-500 hover:opacity-70 cursor-pointer transition-opacity"
+                                                    onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
+                                                
+                                                <dialog id="update_modal_{{ $item->id }}" class="modal modal-bottom sm:modal-middle text-left">
+                                                    <div class="modal-box bg-white text-black border border-gray-200 shadow-xl">
+                                                        <h3 class="text-lg font-bold border-b pb-2 mb-4">Update Tindakan</h3>
+                                                        
+                                                        <form method="POST" action="{{ route('update.tindakan', $item->id) }}" enctype="multipart/form-data">
                                                             @csrf
                                                             @method('PUT')
 
-                                                            <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                                            <div class="grid grid-cols-1 gap-4">
                                                                 <div class="flex items-center gap-3">
-                                                                    <label for="pasien_{{ $item->id }}"
-                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Pasien</label>
-                                                                    <select id="pasien_{{ $item->id }}"
-                                                                        name="pasien"
-                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
+                                                                    <label for="pasien_{{ $item->id }}" class="text-sm font-medium w-32">Pasien</label>
+                                                                    <select id="pasien_{{ $item->id }}" name="pasien"
+                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 flex-1 w-full @error('pasien') border-red-500 @enderror">
                                                                         <option value="">Pilih Pasien</option>
                                                                         @foreach (\App\Models\Pendaftaran::all() as $pasien)
-                                                                            <option value="{{ $pasien->id }}"
-                                                                                {{ old('pasien', $item->pendaftaran) == $pasien->id ? 'selected' : '' }}>
+                                                                            <option value="{{ $pasien->id }}" {{ old('pasien', $item->pendaftaran) == $pasien->id ? 'selected' : '' }}>
                                                                                 {{ $pasien->nama }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
 
-                                                                @foreach (['tanggal', 'TD/BB'] as $type)
-                                                                    <div class="flex items-center gap-3">
-                                                                        <label
-                                                                            for="{{ $type }}_{{ $item->id }}"
-                                                                            class="text-md font-medium text-black dark:text-black w-32 text-left">
-                                                                            {{ ucfirst(str_replace('_', ' ', $type)) }}
-                                                                        </label>
-                                                                        @if ($type == 'tanggal')
-                                                                            <input type="date"
-                                                                                id="{{ $type }}_{{ $item->id }}"
-                                                                                name="{{ $type }}"
-                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error($type) border-red-500 @enderror"
-                                                                                value="{{ old($type, $item->tanggal) }}" />
-                                                                        @elseif ($type == 'TD/BB')
-                                                                            <div
-                                                                                class="flex items-center gap-1 flex-1">
-                                                                                <input type="number"
-                                                                                    id="td_{{ $item->id }}"
-                                                                                    name="td"
-                                                                                    placeholder="Masukan TD..."
-                                                                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
-                                                                                    value="{{ old('td', $item->tensi_darah) }}" />
-                                                                                <span class="text-black">/</span>
-                                                                                <input type="number"
-                                                                                    id="bb_{{ $item->id }}"
-                                                                                    name="bb"
-                                                                                    placeholder="Masukan BB..."
-                                                                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
-                                                                                    value="{{ old('bb', $item->berat_badan) }}" />
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                @endforeach
+                                                                <div class="flex items-center gap-3">
+                                                                    <label for="tanggal_{{ $item->id }}" class="text-sm font-medium w-32">Tanggal</label>
+                                                                    <input type="date" id="tanggal_{{ $item->id }}" name="tanggal"
+                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 flex-1 w-full @error('tanggal') border-red-500 @enderror"
+                                                                        value="{{ old('tanggal', $item->tanggal) }}" />
+                                                                </div>
 
                                                                 <div class="flex items-center gap-3">
-                                                                    <label for="tindakan_{{ $item->id }}"
-                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Tindakan</label>
-                                                                    <select id="tindakan_{{ $item->id }}"
-                                                                        name="tindakan"
-                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
+                                                                    <label class="text-sm font-medium w-32">TD/BB</label>
+                                                                    <div class="flex items-center gap-2 flex-1">
+                                                                        <input type="number" id="td_{{ $item->id }}" name="td" placeholder="TD..."
+                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 w-full @error('td') border-red-500 @enderror"
+                                                                            value="{{ old('td', $item->tensi_darah) }}" />
+                                                                        <span>/</span>
+                                                                        <input type="number" id="bb_{{ $item->id }}" name="bb" placeholder="BB..."
+                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 w-full @error('bb') border-red-500 @enderror"
+                                                                            value="{{ old('bb', $item->berat_badan) }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="flex items-center gap-3">
+                                                                    <label for="tindakan_{{ $item->id }}" class="text-sm font-medium w-32">Tindakan</label>
+                                                                    <select id="tindakan_{{ $item->id }}" name="tindakan"
+                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 flex-1 w-full @error('tindakan') border-red-500 @enderror">
                                                                         <option value="">Pilih Tindakan</option>
                                                                         @foreach (\App\Models\OpsiTindakan::all() as $opsi)
-                                                                            <option value="{{ $opsi->id }}"
-                                                                                {{ old('tindakan', $item->opsi_tindakan) == $opsi->id ? 'selected' : '' }}>
+                                                                            <option value="{{ $opsi->id }}" {{ old('tindakan', $item->opsi_tindakan) == $opsi->id ? 'selected' : '' }}>
                                                                                 {{ $opsi->nama }}
                                                                             </option>
                                                                         @endforeach
@@ -364,75 +351,61 @@
                                                                 </div>
 
                                                                 <div class="flex items-center gap-3">
-                                                                    <label for="biaya_{{ $item->id }}"
-                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Biaya</label>
-                                                                    <input type="text"
-                                                                        id="biaya_{{ $item->id }}"
-                                                                        name="formatted_biaya"
-                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
+                                                                    <label for="biaya_{{ $item->id }}" class="text-sm font-medium w-32">Biaya</label>
+                                                                    <input type="text" id="biaya_{{ $item->id }}" name="formatted_biaya"
+                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-[#7cb342] focus:border-[#7cb342] p-2 flex-1 w-full"
                                                                         placeholder="Masukan Biaya..."
                                                                         value="{{ old('formatted_biaya', $item->biaya) }}"
                                                                         oninput="formatRupiah(this)" />
-                                                                    <input type="hidden"
-                                                                        id="biaya_raw_{{ $item->id }}"
-                                                                        name="biaya"
+                                                                    <input type="hidden" id="biaya_raw_{{ $item->id }}" name="biaya"
                                                                         value="{{ old('biaya', $item->biaya) }}" />
                                                                 </div>
                                                             </div>
 
-                                                            <div class="modal-action">
-                                                                <button type="button"
-                                                                    onclick="document.getElementById('update_modal_{{ $item->id }}').close()"
-                                                                    class="btn border-none text-black hover:bg-neutral-focus">Batal</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary border-none text-black hover:bg-[#c97433]">Simpan</button>
+                                                            <div class="modal-action mt-6 border-t pt-4">
+                                                                <button type="button" onclick="document.getElementById('update_modal_{{ $item->id }}').close()"
+                                                                    class="btn bg-gray-200 hover:bg-gray-300 text-gray-800 border-none">Batal</button>
+                                                                <button type="submit" class="btn bg-[#7cb342] hover:bg-[#689f38] text-white border-none">Simpan</button>
                                                             </div>
                                                         </form>
                                                     </div>
-                                                </div>
-                                            </dialog>
+                                                </dialog>
 
-                                            <x-lucide-trash class="size-5 hover:stroke-red-500 cursor-pointer"
-                                                onclick="document.getElementById('hapus_{{ $item->id }}').showModal();" />
-                                            <dialog id="hapus_{{ $item->id }}"
-                                                class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral border border-back text-left">
-                                                    <h3 class="text-lg text-black font-bold capitalize">Hapus
-                                                        tindakan
-                                                    </h3>
-                                                    <div class="mt-3">
-                                                        <p class="text-red-400 font-semibold mb-2">Perhatian! Anda
-                                                            sedang
-                                                            mencoba untuk menghapus data tindakan
-                                                        </p>
-                                                        <p class="text-black text-sm">Tindakan ini akan menghapus semua data terkait secara permanen. Apakah Anda yakin ingin melanjutkan?</p>
+                                                <x-lucide-trash class="size-5 stroke-red-500 hover:opacity-70 cursor-pointer transition-opacity"
+                                                    onclick="document.getElementById('hapus_{{ $item->id }}').showModal();" />
+                                                
+                                                <dialog id="hapus_{{ $item->id }}" class="modal modal-bottom sm:modal-middle text-left">
+                                                    <div class="modal-box bg-white text-black border border-gray-200 shadow-xl">
+                                                        <h3 class="text-lg font-bold text-red-600 border-b pb-2 mb-4">Hapus Tindakan</h3>
+                                                        
+                                                        <div class="mb-6">
+                                                            <p class="font-semibold mb-1">Perhatian!</p>
+                                                            <p class="text-sm text-gray-600">Anda sedang mencoba menghapus data tindakan. Tindakan ini akan menghapus semua data terkait secara permanen. Apakah Anda yakin?</p>
+                                                        </div>
+                                                        
+                                                        <div class="modal-action border-t pt-4">
+                                                            <button type="button" onclick="document.getElementById('hapus_{{ $item->id }}').close()"
+                                                                class="btn bg-gray-200 hover:bg-gray-300 text-gray-800 border-none">Batal</button>
+                                                            <form action="{{ route('delete.tindakan', $item->id) }}" method="POST" class="inline-block">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn bg-red-500 hover:bg-red-600 text-white border-none">Ya, Hapus</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-action">
-                                                        <button type="button"
-                                                            onclick="document.getElementById('hapus_{{ $item->id }}').close()"
-                                                            class="btn border-none hover:bg-neutral-focus text-black">Batal</button>
-                                                        <form action="{{ route('delete.tindakan', $item->id) }}"
-                                                            method="POST" class="inline-block">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-error border-none text-black">Ya, Hapus</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </dialog>
+                                                </dialog>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="font-semibold capitalize text-center" colspan="9">
-                                            Tidak ada data tindakan terdaftar</td>
+                                        <td class="py-6 font-semibold text-gray-500 text-center" colspan="9">
+                                            Tidak ada data tindakan terdaftar
+                                        </td>
                                     </tr>
                                 @endforelse
+                            </tbody>
                         </table>
-                        <div class="mt-4">
-                            {{ $tindakan->links('vendor.pagination.tailwind') }}
-                        </div>
                     </div>
                 </div>
             </div>

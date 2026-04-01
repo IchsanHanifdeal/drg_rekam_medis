@@ -1,10 +1,10 @@
 <x-dashboard.main title="Pengeluaran">
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-            <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
+        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7 bg-white">
+            <h1 class="text-black font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Pengeluaran
             </h1>
-            <p class="text-sm opacity-60 text-white">
+            <p class="text-sm opacity-60 text-black">
                 Fitur Tambah pengeluaran memungkinkan pengguna untuk menambahkan data pengeluaran ke sistem.
             </p>
             <form method="POST" action="{{ route('store.pengeluaran') }}" enctype="multipart/form-data" class="mt-5">
@@ -13,7 +13,7 @@
                     @foreach (['keterangan', 'tanggal', 'jumlah'] as $type)
                         <div class="flex items-center gap-3">
                             <label for="{{ $type }}"
-                                class="text-md font-medium text-white dark:text-white w-32">
+                                class="text-md font-medium text-black dark:text-black w-32">
                                 {{ ucfirst(str_replace('_', ' ', $type)) }}
                             </label>
                             @if ($type == 'tanggal')
@@ -67,7 +67,7 @@
 
                 <div class="flex gap-3 justify-end mt-4">
                     <button type="reset" class="btn">Reset</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn text-white" style="background-color: {{ $web_config->theme_colors['accent'] }}">Simpan</button>
                 </div>
             </form>
         </div>
@@ -75,24 +75,24 @@
 
     <div class="flex gap-5">
         @foreach (['data_pengeluaran'] as $item)
-            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
+            <div class="flex flex-col border-back rounded-xl w-full bg-white">
+                <div class="p-5 sm:p-7 rounded-t-xl bg-white">
+                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
-                    <p class="text-sm opacity-60 text-white">
+                    <p class="text-sm opacity-60 text-black">
                         Jelajahi dan ketahui Pengeluaran.
                     </p>
                 </div>
-                <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="w-full px-5 sm:px-7 my-4 bg-white">
                     <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full text-black bg-white">
                 </div>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
-                        <table class="table w-full text-white" id="dataTable">
+                        <table class="table w-full" id="dataTable">
                             <thead class="text-sm">
-                                <tr class="text-white">
+                                <tr class="text-black">
                                     @foreach (['No', 'Nama Pengeluaran', 'Hari/Tanggal', 'Jumlah', ''] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}</th>
                                     @endforeach
@@ -200,8 +200,7 @@
                                                                 <button type="button"
                                                                     onclick="document.getElementById('update_modal_{{ $item->id }}').close()"
                                                                     class="btn">Batal</button>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">Simpan</button>
+                                                                <button type="submit" class="btn text-white" style="background-color: {{ $web_config->theme_colors['accent'] }}">Simpan</button>
                                                             </div>
                                                         </form>
                                                     </div>

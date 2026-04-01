@@ -1,15 +1,15 @@
 <x-dashboard.main title="Pendaftaran">
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-            <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
+        <div class="flex flex-col border-back bg-white rounded-xl w-full p-5 sm:p-7">
+            <h1 class="text-black font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Pasien
             </h1>
-            <p class="text-sm opacity-60 text-white">
+            <p class="text-sm opacity-60 text-black">
                 Fitur Tambah pasien memungkinkan pengguna untuk menambahkan data pasien ke sistem.
             </p>
 
             <div class="flex justify-end mb-4">
-                <div class="text-white font-semibold rounded-lg px-4 py-2" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#aa8f55' }};">
+                <div class="text-white font-semibold rounded-lg px-4 py-2" style="background-color: {{ $web_config->theme_colors['accent'] ?? '#aa8f55' }};">
                     No. Rekam Medis: <span id="registrationNumber">{{ $nomor_rekam_medis }}</span>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                         @foreach (['nama', 'nik', 'umur', 'pekerjaan','jenis_kelamin', 'alamat', 'no_hp', 'riwayat_penyakit', 'riwayat_alergi'] as $type)
                             <div class="flex items-center gap-3">
                                 <label for="{{ $type }}"
-                                    class="text-md font-medium text-white dark:text-white w-32">
+                                    class="text-md font-medium text-black dark:text-black w-32">
                                     {{ ucfirst(str_replace('_', ' ', $type)) }}
                                 </label>
 
@@ -37,7 +37,7 @@
                                             readonly value="{{ old('umur') }}" />
 
                                         <button type="button" id="editAgeButton"
-                                            class="absolute right-3 top-3 text-white btn hidden"
+                                            class="absolute right-3 top-3 text-black btn hidden"
                                             style="background-color: {{ $web_config->theme_colors['primary'] ?? '#aa8f55' }};" onclick="enableDateInput()">Edit</button>
                                     </div>
                                 @elseif ($type == 'jenis_kelamin')
@@ -138,27 +138,27 @@
 
     <div class="flex gap-5">
         @foreach (['data_pasien'] as $item)
-            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
+            <div class="flex flex-col border-back rounded-xl w-full bg-white">
+                <div class="p-5 sm:p-7 rounded-t-xl bg-white">
+                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
-                    <p class="text-sm opacity-60 text-white">
+                    <p class="text-sm opacity-60 text-black">
                         Jelajahi dan ketahui pasien.
                     </p>
                 </div>
                 <form action="{{ route('pendaftaran') }}" method="GET" class="w-full">
-                    <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                    <div class="w-full px-5 sm:px-7 my-4 bg-white">
                         <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
                             value="{{ request('nama') }}"
-                            class="input input-sm shadow-md w-full text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                            class="input input-sm shadow-md w-full text-black bg-white">
                     </div>
                 </form>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
-                        <table class="table w-full text-white" id="dataTable">
+                        <table class="table w-full text-black" id="dataTable">
                             <thead class="text-sm">
-                                <tr class="text-white">
+                                <tr class="text-black">
                                     @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'Umur', 'Tanggal Lahir', 'Jenis Kelamin', 'Alamat', 'No Handphone', ''] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}
                                         </th>
@@ -195,7 +195,7 @@
                                                 onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
                                             <dialog id="update_modal_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral text-white">
+                                                <div class="modal-box bg-neutral text-black">
                                                     <h3 class="text-lg font-bold">Update Pendaftaran Pasien</h3>
                                                     <div class="mt-3">
                                                         <form method="POST"
@@ -206,7 +206,7 @@
 
                                                             @foreach (['nama', 'nik', 'umur', 'pekerjaan', 'jenis_kelamin', 'alamat', 'no_hp', 'riwayat_penyakit', 'riwayat_alergi'] as $field)
                                                                 <div class="mb-4">
-                                                                    <label for="edit_{{ $field }}_{{ $item->id }}" class="block mb-2 text-sm font-medium text-white capitalize">
+                                                                    <label for="edit_{{ $field }}_{{ $item->id }}" class="block mb-2 text-sm font-medium text-black capitalize">
                                                                         {{ str_replace('_', ' ', $field) }}
                                                                     </label>
 
@@ -248,7 +248,7 @@
                                             <dialog id="hapus_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
                                                 <div class="modal-box bg-neutral">
-                                                    <h3 class="text-lg text-white font-bold capitalize">Hapus
+                                                    <h3 class="text-lg text-black font-bold capitalize">Hapus
                                                         Pasien {{ $item->nama }}
                                                     </h3>
                                                     <div class="mt-3">
@@ -257,7 +257,7 @@
                                                             mencoba untuk menghapus data pasien
                                                             <strong
                                                                 class="text-red-800 font-bold capitalize">{{ $item->nama }}</strong>.
-                                                            <span class="text-white">Tindakan ini akan menghapus
+                                                            <span class="text-black">Tindakan ini akan menghapus
                                                                 semua data terkait. Apakah Anda yakin ingin
                                                                 melanjutkan?</span>
                                                         </p>
@@ -280,7 +280,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="font-semibold capitalize text-center" colspan="7">
+                                        <td class="font-semibold capitalize text-center" colspan="8">
                                             Tidak ada tindakan terdaftar</td>
                                     </tr>
                                 @endforelse

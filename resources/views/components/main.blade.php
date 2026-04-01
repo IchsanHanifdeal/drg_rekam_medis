@@ -36,7 +36,7 @@
 
 </head>
 
-<body class="flex flex-col mx-auto bg-base-100 font-sans">
+<body class="flex flex-col mx-auto font-sans">
     <main class="{{ $class ?? 'p-4' }}" role="main">
         <div id="splash-screen"
             class="fixed inset-0 flex items-center justify-center min-h-screen z-[9999] transition-opacity duration-500 ease-in-out opacity-100" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#eb873b' }};">

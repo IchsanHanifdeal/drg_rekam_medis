@@ -1,27 +1,27 @@
 <x-dashboard.main title="Laporan">
     <div class="grid grid-cols-1 gap-5">
         {{-- Bagian Laporan Keuangan --}}
-        <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-            <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
-                <h1 class="font-semibold font-[onest] text-lg capitalize text-white">
+        <div class="flex flex-col border-back rounded-xl w-full bg-white">
+            <div class="p-5 sm:p-7 rounded-t-xl bg-white">
+                <h1 class="font-semibold font-[onest] text-lg capitalize text-black">
                     Laporan Keuangan
                 </h1>
-                <p class="text-sm opacity-60 text-white">
+                <p class="text-sm opacity-60 text-black">
                     Detail laporan keuangan untuk periode tertentu.
                 </p>
             </div>
 
-            <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7 bg-white">
                 {{-- Form Filter --}}
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
                     <form method="GET" action="{{ route('laporan') }}"
                         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex gap-3 w-full lg:w-auto">
                         <input type="date" name="start_date" value="{{ request('start_date') }}"
-                            class="input input-sm shadow-md w-full bg-neutral text-white" placeholder="Dari Tanggal">
+                            class="input input-sm shadow-md w-full text-black" placeholder="Dari Tanggal">
                         <input type="date" name="end_date" value="{{ request('end_date') }}"
-                            class="input input-sm shadow-md w-full bg-neutral text-white" placeholder="Sampai Tanggal">
+                            class="input input-sm shadow-md w-full text-black" placeholder="Sampai Tanggal">
                         <select name="range"
-                            class="input input-sm shadow-md w-full bg-neutral text-white">
+                            class="input input-sm shadow-md w-full text-black">
                             <option value="">Pilih Rentang</option>
                             <option value="7_days" {{ request('range') == '7_days' ? 'selected' : '' }}>7 Hari Terakhir
                             </option>
@@ -59,9 +59,9 @@
                     <p class="text-gray-300">Tidak ada data untuk periode yang dipilih.</p>
                 @else
                     <div class="overflow-x-auto w-full">
-                        <table class="table w-full text-white text-sm sm:text-base">
+                        <table class="table w-full text-black text-sm sm:text-base">
                             <thead>
-                                <tr class="text-white text-center">
+                                <tr class="text-black text-center">
                                     <th class="uppercase font-bold">No</th>
                                     <th class="uppercase font-bold">Tanggal</th>
                                     <th class="uppercase font-bold">Keterangan</th>

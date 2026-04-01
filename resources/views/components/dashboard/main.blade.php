@@ -4,7 +4,7 @@
         <div class="drawer-content flex flex-col">
             @include('components.dashboard.navbar')
             
-            <div class="p-4 md:p-6 flex-1" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#A5B985' }};">
+            <div class="p-4 md:p-6 flex-1">
                 <div class="flex flex-col gap-6">
                     @if (session('success'))
                         <div role="alert" class="alert alert-success shadow-sm">

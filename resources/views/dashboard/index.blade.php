@@ -2,7 +2,7 @@
     <div class="p-4 lg:p-6">
         <!-- Dashboard Header -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-base-content">Selamat Datang di <span style="color: {{ $web_config->theme_colors['accent'] ?? '#eb873b' }};">{{ $web_config->nama_klinik ?? 'Default' }}</span></h1>
+            <h1 class="text-2xl font-bold text-base-content">Selamat Datang di <span>{{ $web_config->nama_klinik ?? 'Default' }}</span></h1>
         </div>
 
         @php
@@ -67,18 +67,18 @@
         <!-- Grafik dan Informasi -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <!-- Grafik -->
-            <div class="card shadow-lg border border-base-300" style="background-color: {{ $web_config->theme_colors['secondary'] ?? '#A5B985' }};">
+            <div class="card shadow-lg border border-base-300 bg-white">
                 <div class="card-body">
                     <h2 class="card-title">Grafik Pasien</h2>
-                    <div class="mockup-window border" style="background-color: {{ $web_config->theme_colors['secondary'] ?? '#A5B985' }};">
-                        <div class="flex justify-center" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#A5B985' }};">
+                    <div class="mockup-window border" style="background-color: {{ $web_config->theme_colors['accent'] ?? '#A5B985' }};">
+                        <div class="flex justify-center bg-white">
                             <canvas id="chart-kunjungan" class="w-full max-w-[90%] h-64"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-lg border border-base-300" style="background-color: {{ $web_config->theme_colors['secondary'] ?? '#A5B985' }};">
+            <div class="card shadow-lg border border-base-300 bg-white">
                 <div class="card-body">
                     <h2 class="card-title">Aktivitas Terbaru</h2>
                     <ul class="menu menu-compact">
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div class="card shadow-lg border border-base-300" style="background-color: {{ $web_config->theme_colors['secondary'] ?? '#A5B985' }};">
+        <div class="card shadow-lg border border-base-300 bg-white">
             <div class="card-body">
                 <h2 class="card-title">Pasien Terbaru</h2>
                 <div class="overflow-x-auto">

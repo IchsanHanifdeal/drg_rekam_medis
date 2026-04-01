@@ -1,4 +1,4 @@
-<div class="navbar sticky top-0 border-b border-base-300 shadow-md z-10" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#A5B985' }};">
+<div class="navbar sticky top-0 border-b border-base-300 shadow-md z-10" style="background-color: {{ $web_config->theme_colors['accent'] ?? '#A5B985' }};">
     <div class="flex-none md:hidden">
         <label for="aside-dashboard" aria-label="Open sidebar" class="btn btn-square btn-ghost">
             <x-lucide-align-left class="w-6 h-6 stroke-[1.5]" />
@@ -8,7 +8,7 @@
     <div class="flex-1 px-2 mx-2"></div>
 
     <div class="flex-none flex justify-end items-center gap-4 relative">
-        <p class='font-[onest] font-extrabold text-xl text-3xl' style="color: {{ $web_config->theme_colors['accent'] ?? '#eb873b' }};">{{ $web_config->nama_dokter ?? 'Default' }}</p>
+        <p class='font-[onest] font-extrabold text-xl text-3xl text-white' >{{ $web_config->nama_dokter ?? 'Default' }}</p>
 
         <div class="dropdown dropdown-end">
             <button class="btn btn-ghost btn-square">
