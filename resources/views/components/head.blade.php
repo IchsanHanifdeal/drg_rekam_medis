@@ -4,16 +4,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- SEO Meta Tags for SDC Dental Clinic --}}
-    <title>{{ $title ?? 'Beranda' }} | SDC Dental Clinic</title>
-    <meta name="description" content="SDC Dental Clinic Batusangkar menyediakan layanan gigi profesional dan komprehensif, mulai dari pemeriksaan rutin hingga perawatan estetika dan implan gigi. Kunjungi kami untuk senyum sehat Anda!">
-    <meta name="keywords" content="SDC Dental Clinic, dokter gigi Batusangkar, klinik gigi Batusangkar, perawatan gigi, pembersihan karang gigi, tambal gigi, cabut gigi, behel gigi, veneer gigi, implan gigi, kesehatan gigi Batusangkar">
+    {{-- SEO Meta Tags for {{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }} --}}
+    <title>{{ $title ?? 'Beranda' }} | {{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }}</title>
+    <meta name="description" content="{{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }} menyediakan layanan gigi profesional dan komprehensif, mulai dari pemeriksaan rutin hingga perawatan estetika dan implan gigi. Kunjungi kami untuk senyum sehat Anda!">
+    <meta name="keywords" content="{{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }}, dokter gigi, klinik gigi, perawatan gigi, pembersihan karang gigi, tambal gigi, cabut gigi, behel gigi, veneer gigi, implan gigi, kesehatan gigi">
 
     {{-- Open Graph / Social Media Meta Tags --}}
     <meta property="og:url" content="{{ url('/') }}"> {{-- Use url('/') for the base URL --}}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="SDC Dental Clinic - Perawatan Gigi Profesional di Batusangkar">
-    <meta property="og:description" content="Klinik gigi terpercaya di Batusangkar. SDC Dental Clinic menawarkan layanan lengkap untuk kesehatan dan estetika gigi Anda. Jadwalkan kunjungan Anda sekarang!">
+    <meta property="og:title" content="{{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }} - Perawatan Profesional">
+    <meta property="og:description" content="Klinik terpercaya. {{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }} memprioritaskan kesehatan dan perawatan Anda. Jadwalkan kunjungan Anda sekarang!">
     <meta property="og:image" content="{{ asset('image/social-share-image.jpg') }}"> {{-- Add a dedicated image for social sharing --}}
     <meta property="og:image:width" content="1200"> {{-- Recommended width for social media images --}}
     <meta property="og:image:height" content="630"> {{-- Recommended height for social media images --}}
@@ -22,12 +22,16 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="{{ request()->getHost() }}">
     <meta property="twitter:url" content="{{ url('/') }}">
-    <meta name="twitter:title" content="SDC Dental Clinic - Dokter Gigi Terbaik di Batusangkar">
-    <meta name="twitter:description" content="Dapatkan perawatan gigi terbaik di SDC Dental Clinic Batusangkar. Ahli dalam scaling, filling, braces, dan banyak lagi. Senyum sehat dimulai di sini!">
+    <meta name="twitter:title" content="{{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }} - Terbaik">
+    <meta name="twitter:description" content="Dapatkan perawatan terbaik di {{ $web_config->nama_klinik ?? 'SDC Dental Clinic' }}. Senyum sehat dimulai di sini!">
     <meta name="twitter:image" content="{{ asset('image/social-share-image.jpg') }}"> {{-- Use the same social share image --}}
 
     {{-- Favicon --}}
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    @php
+        $rawFavicon = $web_config->favicon ?? 'favicon.ico';
+        $faviconUrl = Str::startsWith($rawFavicon, 'images/settings') ? Storage::url($rawFavicon) : asset($rawFavicon);
+    @endphp
+    <link rel="icon" href="{{ $faviconUrl }}" type="image/x-icon">
     <link rel="manifest" href="/manifest.json"> {{-- Ensure this path is correct if you have a PWA manifest --}}
 
     {{-- Google Fonts --}}
@@ -40,6 +44,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 
     {{-- Custom CSS (Vite) --}}
@@ -53,6 +58,7 @@
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -74,4 +80,7 @@
 
     {{-- Custom JavaScript (Vite) --}}
     @vite('resources/js/app.js')
+    
+    {{-- Alpine.js for Odontogram interactivity --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>

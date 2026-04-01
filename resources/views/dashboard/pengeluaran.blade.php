@@ -1,6 +1,6 @@
 <x-dashboard.main title="Pengeluaran">
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="bg-neutral flex flex-col border-back rounded-xl w-full p-5 sm:p-7">
+        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
             <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Pengeluaran
             </h1>
@@ -75,8 +75,8 @@
 
     <div class="flex gap-5">
         @foreach (['data_pengeluaran'] as $item)
-            <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-                <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
@@ -84,9 +84,9 @@
                         Jelajahi dan ketahui Pengeluaran.
                     </p>
                 </div>
-                <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
+                        value="{{ request('nama') }}" class="input input-sm shadow-md w-full text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                 </div>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">

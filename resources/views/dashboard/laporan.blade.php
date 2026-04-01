@@ -1,8 +1,8 @@
 <x-dashboard.main title="Laporan">
     <div class="grid grid-cols-1 gap-5">
         {{-- Bagian Laporan Keuangan --}}
-        <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-            <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+        <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                 <h1 class="font-semibold font-[onest] text-lg capitalize text-white">
                     Laporan Keuangan
                 </h1>
@@ -11,7 +11,7 @@
                 </p>
             </div>
 
-            <div class="flex flex-col bg-neutral rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
+            <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                 {{-- Form Filter --}}
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
                     <form method="GET" action="{{ route('laporan') }}"
@@ -28,7 +28,7 @@
                             <option value="30_days" {{ request('range') == '30_days' ? 'selected' : '' }}>30 Hari Terakhir
                             </option>
                         </select>
-                        <button type="submit" class="btn text-white" style="background-color: #eb873b;">Filter</button>
+                        <button type="submit" class="btn text-white" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#eb873b' }};">Filter</button>
                     </form>
 
                     {{-- Export Buttons --}}
@@ -37,7 +37,7 @@
                             <input type="hidden" name="start_date" value="{{ request('start_date') }}">
                             <input type="hidden" name="end_date" value="{{ request('end_date') }}">
                             <input type="hidden" name="range" value="{{ request('range') }}">
-                            <button type="submit" class="btn btn-sm text-white" style="background-color: #eb873b;">
+                            <button type="submit" class="btn btn-sm text-white" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#eb873b' }};">
                                 Export PDF
                             </button>
                         </form>
@@ -45,7 +45,7 @@
                             <input type="hidden" name="start_date" value="{{ request('start_date') }}">
                             <input type="hidden" name="end_date" value="{{ request('end_date') }}">
                             <input type="hidden" name="range" value="{{ request('range') }}">
-                            <button type="submit" class="btn btn-sm text-white" style="background-color: #eb873b;">
+                            <button type="submit" class="btn btn-sm text-white" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#eb873b' }};">
                                 Export Excel
                             </button>
                         </form>

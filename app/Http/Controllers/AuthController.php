@@ -45,7 +45,6 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            $userRole = $user->role;
 
             $loginTime = Carbon::now();
             $request->session()->put([
@@ -53,20 +52,21 @@ class AuthController extends Controller
                 'nama' => $user->name,
                 'id_user' => $user->id,
                 'email' => $user->email,
-                'role' => $user->role,
+                'role' => $user->getRoleNames()->first(),
                 'created_at' => $user->created_at
             ]);
 
 
-            if ($userRole === 'admin') {
+            if ($user->hasAnyRole(['admin', 'super admin'])) {
                 return redirect()->intended('dashboard')->with('toast', [
                     'message' => 'Login berhasil!',
                     'type' => 'success'
                 ]);
             }
 
+            Auth::logout();
             return back()->with('toast', [
-                'message' => 'Login gagal, role pengguna tidak dikenali.',
+                'message' => 'Login gagal, role pengguna tidak memiliki akses ke dashboard.',
                 'type' => 'error'
             ]);
         }

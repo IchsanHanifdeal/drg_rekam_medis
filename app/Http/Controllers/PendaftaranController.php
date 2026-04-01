@@ -46,6 +46,10 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => 'required|in:laki-laki,perempuan',
                 'alamat' => 'required|string|max:255',
                 'no_hp' => 'required|string|max:15',
+                'nik' => 'nullable',
+                'pekerjaan' => 'nullable',
+                'riwayat_penyakit' => 'nullable',
+                'riwayat_alergi' => 'nullable',
             ], [
                 'nama.required' => 'Nama pasien wajib diisi.',
                 'umur.required' => 'Tanggal lahir wajib diisi.',

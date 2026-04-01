@@ -1,6 +1,6 @@
 <x-dashboard.main title="Pendaftaran">
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="bg-neutral flex flex-col border-back rounded-xl w-full p-5 sm:p-7">
+        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
             <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Pasien
             </h1>
@@ -9,7 +9,7 @@
             </p>
 
             <div class="flex justify-end mb-4">
-                <div class="bg-[#aa8f55] text-white font-semibold rounded-lg px-4 py-2">
+                <div class="text-white font-semibold rounded-lg px-4 py-2" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#aa8f55' }};">
                     No. Rekam Medis: <span id="registrationNumber">{{ $nomor_rekam_medis }}</span>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                 @csrf
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
-                        @foreach (['nama', 'umur', 'jenis_kelamin', 'alamat', 'no_hp'] as $type)
+                        @foreach (['nama', 'nik', 'umur', 'pekerjaan','jenis_kelamin', 'alamat', 'no_hp', 'riwayat_penyakit', 'riwayat_alergi'] as $type)
                             <div class="flex items-center gap-3">
                                 <label for="{{ $type }}"
                                     class="text-md font-medium text-white dark:text-white w-32">
@@ -38,7 +38,7 @@
 
                                         <button type="button" id="editAgeButton"
                                             class="absolute right-3 top-3 text-white btn hidden"
-                                            style="background-color:#aa8f55" onclick="enableDateInput()">Edit</button>
+                                            style="background-color: {{ $web_config->theme_colors['primary'] ?? '#aa8f55' }};" onclick="enableDateInput()">Edit</button>
                                     </div>
                                 @elseif ($type == 'jenis_kelamin')
                                     <select id="{{ $type }}" name="{{ $type }}"
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="modal-action">
-                    <button type="submit" class="btn w-full text-white sm:w-auto" style="background-color: #aa8f55;">
+                    <button type="submit" class="btn w-full text-white sm:w-auto" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#aa8f55' }};">
                         Simpan
                     </button>
                 </div>
@@ -138,8 +138,8 @@
 
     <div class="flex gap-5">
         @foreach (['data_pasien'] as $item)
-            <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-                <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
@@ -148,10 +148,10 @@
                     </p>
                 </div>
                 <form action="{{ route('pendaftaran') }}" method="GET" class="w-full">
-                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                    <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                         <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
                             value="{{ request('nama') }}"
-                            class="input input-sm shadow-md w-full bg-neutral text-white">
+                            class="input input-sm shadow-md w-full text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     </div>
                 </form>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
@@ -159,7 +159,7 @@
                         <table class="table w-full text-white" id="dataTable">
                             <thead class="text-sm">
                                 <tr class="text-white">
-                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'Umur', 'Jenis Kelamin', 'Alamat', 'No Handphone', ''] as $header)
+                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'Umur', 'Tanggal Lahir', 'Jenis Kelamin', 'Alamat', 'No Handphone', ''] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}
                                         </th>
                                     @endforeach
@@ -183,6 +183,7 @@
                                             {{ $diff->y }} tahun, {{ $diff->m }} bulan, {{ $diff->d }}
                                             hari
                                         </td>
+                                        <td class="font-semibold capitalize text-center">{{ $item->umur ?? '-' }}</td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->jenis_kelamin }}</td>
                                         <td class="font-semibold capitalize text-center">
@@ -203,40 +204,30 @@
                                                             @csrf
                                                             @method('PUT')
 
-                                                            @foreach (['nama', 'jenis_kelamin', 'alamat', 'no_hp'] as $field)
+                                                            @foreach (['nama', 'nik', 'umur', 'pekerjaan', 'jenis_kelamin', 'alamat', 'no_hp', 'riwayat_penyakit', 'riwayat_alergi'] as $field)
                                                                 <div class="mb-4">
-                                                                    <label for="{{ $field }}"
-                                                                        class="block mb-2 text-sm font-medium text-white">
-                                                                        {{ ucfirst(str_replace('_', ' ', $field)) }}
+                                                                    <label for="edit_{{ $field }}_{{ $item->id }}" class="block mb-2 text-sm font-medium text-white capitalize">
+                                                                        {{ str_replace('_', ' ', $field) }}
                                                                     </label>
 
                                                                     @if ($field === 'jenis_kelamin')
-                                                                        <!-- Dropdown untuk jenis kelamin -->
-                                                                        <select id="{{ $field }}"
-                                                                            name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror">
-                                                                            <option value="">Pilih Jenis Kelamin
-                                                                            </option>
-                                                                            <option value="laki-laki"
-                                                                                {{ old($field, $item->$field) === 'laki-laki' ? 'selected' : '' }}>
-                                                                                Laki-laki
-                                                                            </option>
-                                                                            <option value="perempuan"
-                                                                                {{ old($field, $item->$field) === 'perempuan' ? 'selected' : '' }}>
-                                                                                Perempuan
-                                                                            </option>
+                                                                        <select id="edit_{{ $field }}_{{ $item->id }}" name="{{ $field }}"
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                                                            <option value="laki-laki" {{ old($field, $item->$field) === 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                                                            <option value="perempuan" {{ old($field, $item->$field) === 'perempuan' ? 'selected' : '' }}>Perempuan</option>
                                                                         </select>
+                                                                    @elseif ($field === 'umur')
+                                                                        <input type="date" id="edit_{{ $field }}_{{ $item->id }}" name="{{ $field }}"
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                                                            value="{{ old($field, \Carbon\Carbon::parse($item->$field)->format('Y-m-d')) }}" />
                                                                     @else
-                                                                        <input type="text"
-                                                                            id="{{ $field }}"
-                                                                            name="{{ $field }}"
-                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($field) border-red-500 @enderror"
+                                                                        <input type="text" id="edit_{{ $field }}_{{ $item->id }}" name="{{ $field }}"
+                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                                                             value="{{ old($field, $item->$field) }}" />
                                                                     @endif
 
                                                                     @error($field)
-                                                                        <span
-                                                                            class="text-red-500 text-sm">{{ $message }}</span>
+                                                                        <span class="text-red-500 text-sm">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
                                                             @endforeach

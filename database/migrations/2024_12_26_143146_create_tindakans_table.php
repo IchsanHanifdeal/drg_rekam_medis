@@ -16,9 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('pendaftaran');
             $table->foreign('pendaftaran')->references('id')->on('pendaftaran')->constrained()->onDelete('cascade');
             $table->date('tanggal');
-            $table->string('tensi_darah');
-            $table->string('berat_badan');
             $table->string('biaya');
+            $table->string('tensi_darah')->nullable();
+            $table->string('berat_badan')->nullable();
+            $table->integer('tooth_number')->nullable();
             $table->unsignedBigInteger('opsi_tindakan');
             $table->foreign('opsi_tindakan')->references('id')->on('opsi_tindakan')->constrained()->onDelete('cascade');
             $table->timestamps();

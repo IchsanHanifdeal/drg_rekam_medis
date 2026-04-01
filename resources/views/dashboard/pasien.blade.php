@@ -1,8 +1,8 @@
 <x-dashboard.main title="Pasien">
     <div class="flex gap-5">
         @foreach (['data_pasien'] as $item)
-            <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-                <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
@@ -11,9 +11,9 @@
                     </p>
                 </div>
                 <form action="{{ route('pasien') }}" method="GET" class="w-full">
-                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                    <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                         <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
-                            value="{{ request('nama') }}" class="input input-sm shadow-md w-full bg-neutral text-white">
+                            value="{{ request('nama') }}" class="input input-sm shadow-md w-full text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     </div>
                 </form>
                 <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
@@ -56,7 +56,7 @@
                                                 onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
                                             <dialog id="update_modal_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral text-white">
+                                                <div class="modal-box text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                                                     <h3 class="text-lg font-bold">Update Pendaftaran Pasien</h3>
                                                     <div class="mt-3">
                                                         <form method="POST"

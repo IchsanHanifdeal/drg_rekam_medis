@@ -39,15 +39,19 @@
 <body class="flex flex-col mx-auto bg-base-100 font-sans">
     <main class="{{ $class ?? 'p-4' }}" role="main">
         <div id="splash-screen"
-            class="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300 min-h-screen z-[9999] transition-opacity duration-500 ease-in-out opacity-100">
+            class="fixed inset-0 flex items-center justify-center min-h-screen z-[9999] transition-opacity duration-500 ease-in-out opacity-100" style="background-color: {{ $web_config->theme_colors['primary'] ?? '#eb873b' }};">
             <div class="relative flex flex-col items-center justify-center p-8 bg-slate-200 rounded-lg shadow-lg">
                 <!-- Loading Animation -->
                 <div class="flex items-center space-x-2">
-                    <img src="{{asset('image/logo.png')}}" alt="Logo Sioner" class="mr-2 animated-logo">
+                    @php
+                        $rawLogo = $web_config->logo ?? 'default/logo.png';
+                        $logoUrl = Str::startsWith($rawLogo, 'images/settings') ? Storage::url($rawLogo) : asset($rawLogo);
+                    @endphp
+                    <img src="{{ $logoUrl }}" alt="{{ $web_config->nama_klinik ?? 'Logo' }}" class="mr-2 animated-logo">
                 </div>
                 <!-- Logo and Branding -->
                 <div class="mt-6 flex flex-col items-center">
-                    <h1 class="text-3xl font-bold text-[#eb873b]">SDC DENTAL CLINIC</h1>
+                    <h1 class="text-3xl font-bold" style="color: {{ $web_config->theme_colors['accent'] ?? '#eb873b' }};">{{ $web_config->nama_klinik ?? 'default' }}</h1>
                     <p class="text-base-content text-sm mt-2 italic text-black">Tunggu sebentar, sedang memuat...</p>
                 </div>
             </div>

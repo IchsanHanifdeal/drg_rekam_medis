@@ -19,6 +19,10 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
             $table->string('alamat');
             $table->string('no_hp');
+            $table->string('nik', 16)->unique();
+            $table->string('pekerjaan')->nullable();
+            $table->text('riwayat_penyakit')->nullable(); 
+            $table->text('riwayat_alergi')->nullable();   
             $table->timestamps();
         });
     }

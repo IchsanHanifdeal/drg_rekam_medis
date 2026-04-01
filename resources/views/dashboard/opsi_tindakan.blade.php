@@ -2,7 +2,7 @@
     <div class="flex flex-col lg:flex-row gap-5">
         @foreach (['tambah_tindakan'] as $item)
             <div onclick="{{ $item . '_modal' }}.showModal()"
-                class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
+                class="flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                 <div>
                     <h1
                         class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
@@ -20,8 +20,8 @@
 
     <div class="flex gap-5">
         @foreach (['opsi_tindakan'] as $item)
-            <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-                <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+            <div class="flex flex-col border-back rounded-xl w-full"  style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
@@ -58,7 +58,7 @@
                                                 onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
                                             <dialog id="update_modal_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral text-white">
+                                                <div class="modal-box text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                                                     <h3 class="text-lg font-bold">Update Data
                                                     </h3>
                                                     <div class="mt-3">
@@ -100,7 +100,7 @@
                                                 onclick="document.getElementById('hapus_{{ $item->id }}').showModal();" />
                                             <dialog id="hapus_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral">
+                                                <div class="modal-box" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                                                     <h3 class="text-lg text-white font-bold capitalize">
                                                         Hapus
                                                         Opsi Tindakan
@@ -150,7 +150,7 @@
     </div>
 
     <dialog id="tambah_tindakan_modal" class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box bg-neutral text-white">
+        <div class="modal-box text-white" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
             <h3 class="text-lg font-bold">Tambah Data Tindakan</h3>
             <div class="mt-3">
                 <form method="POST" action="{{ route('store.opsi_tindakan') }}" enctype="multipart/form-data">

@@ -15,13 +15,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-         $admin = User::create([
-            'name' => 'Admin sdc',
-            'email' => 'admin@sdc.com',
-            'password' => Hash::make('admin123'),
-            'role' => 'admin',
+        $superAdmin = User::create([
+            'name' => 'Ivan Hanifdeal',
+            'email' => 'ivanhanifdeal@gmail.com',
+            'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+        $superAdmin->assignRole('super admin');
+
+        $admin = User::create([
+            'name' => 'Admin Mutia Dental Clinic',
+            'email' => 'admin@mdc.com',
+            'password' => Hash::make('password'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        $admin->assignRole('admin');
     }
 }

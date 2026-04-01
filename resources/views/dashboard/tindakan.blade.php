@@ -1,20 +1,24 @@
 <x-dashboard.main title="Tindakan">
+    <!-- TAMBAH TINDAKAN FORM -->
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="bg-neutral flex flex-col border-back rounded-xl w-full p-5 sm:p-7">
-            <h1 class="text-white font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
+        <div class="flex flex-col border-back rounded-xl w-full p-5 sm:p-7" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <h1 class="text-black font-semibold flex items-start gap-3 font-[onest] sm:text-lg capitalize">
                 Tambah Tindakan
             </h1>
-            <p class="text-sm opacity-60 text-white">
+            <p class="text-sm opacity-60 text-black">
                 Fitur Tambah tindakan memungkinkan pengguna untuk menambahkan data tindakan ke sistem.
             </p>
             <form method="POST" action="{{ route('store.tindakan') }}" enctype="multipart/form-data" class="mt-5">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     <div class="flex items-center gap-3">
-                        <label for="pasien" class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
+                        <label for="pasien" class="text-md font-medium text-black dark:text-black w-32">Pasien</label>
                         <select id="pasien" name="pasien"
-                            class="searchable-select bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
+                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 w-full @error('pasien') border-red-500 @enderror">
                             <option value="">Pilih Pasien</option>
+                            @foreach ($pendaftarans as $pasien)
+                                <option value="{{ $pasien->id }}">{{ $pasien->nomor_rekam_medis }} - {{ $pasien->nama }}</option>
+                            @endforeach
                         </select>
                         @error('pasien')
                             <span class="text-red-500 text-md">{{ $message }}</span>
@@ -24,7 +28,7 @@
                     @foreach (['tanggal', 'TD/BB'] as $type)
                         <div class="flex items-center gap-3">
                             <label for="{{ $type }}"
-                                class="text-md font-medium text-white dark:text-white w-32">
+                                class="text-md font-medium text-black dark:text-black w-32">
                                 {{ ucfirst(str_replace('_', ' ', $type)) }}
                             </label>
                             @if ($type == 'tanggal')
@@ -36,7 +40,7 @@
                                     <input type="number" id="td" name="td" placeholder="Masukan TD..."
                                         class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
                                         value="{{ old('td') }}" />
-                                    <span class="text-white">/</span>
+                                    <span class="text-black">/</span>
                                     <input type="number" id="bb" name="bb" placeholder="Masukan BB..."
                                         class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('bb') border-red-500 @enderror"
                                         value="{{ old('bb') }}" />
@@ -49,8 +53,26 @@
                     @endforeach
 
                     <div class="flex items-center gap-3">
+                        <label class="text-md font-medium text-black dark:text-black w-32">Odontogram</label>
+                        <div class="flex flex-1 gap-2 flex-col sm:flex-row items-stretch sm:items-center">
+                            <div class="flex gap-2 flex-1">
+                                <input type="text" id="display_tooth" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3" placeholder="Pilih Gigi di Peta..." readonly />
+                                <input type="text" id="display_surface" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3" placeholder="Permukaan..." readonly />
+                            </div>
+                            <select name="condition_code" id="condition_code" onchange="window.dispatchEvent(new CustomEvent('condition-code-changed', { detail: this.value }))" class="bg-gray-300 border border-red-300 text-red-900 rounded-lg focus:ring-red-500 p-2.5 flex-1 font-semibold">
+                                <option value="" selected>Kondisi Gigi (Opsional)</option>
+                                <option value="karies">Karies</option>
+                                <option value="restorasi">Restorasi</option>
+                                <option value="cabut">Missing / Cabut</option>
+                                <option value="lainnya">Lainnya / Sehat</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="odontogram_selections" id="input_odontogram_selections" value="[]" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
                         <label for="tindakan"
-                            class="text-md font-medium text-white dark:text-white w-32">Tindakan</label>
+                            class="text-md font-medium text-black dark:text-black w-32">Tindakan</label>
                         <select id="tindakan" name="tindakan"
                             class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
                             <option value="">Pilih Tindakan</option>
@@ -67,7 +89,7 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <label for="biaya" class="text-md font-medium text-white dark:text-white w-32">Biaya</label>
+                        <label for="biaya" class="text-md font-medium text-black dark:text-black w-32">Biaya</label>
                         <input type="text" id="biaya" name="formatted_biaya"
                             class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1"
                             placeholder="Masukan Biaya..." value="{{ old('formatted_biaya') }}"
@@ -79,102 +101,167 @@
                     </div>
                 </div>
 
-                <script>
-                    function formatRupiah(element) {
-                        let value = element.value.replace(/[^,\d]/g, '');
-                        let split = value.split(',');
-                        let sisa = split[0].length % 3;
-                        let rupiah = split[0].substr(0, sisa);
-                        let ribuan = split[0].substr(sisa).match(/\d{3}/g);
-
-                        if (ribuan) {
-                            let separator = sisa ? '.' : '';
-                            rupiah += separator + ribuan.join('.');
-                        }
-
-                        element.value = 'Rp' + (split[1] !== undefined ? rupiah + ',' + split[1] : rupiah);
-                        document.getElementById('biaya_raw').value = value;
-                    }
-
-                    document.addEventListener('DOMContentLoaded', function() {
-                        new TomSelect('#pasien', {
-                            create: false,
-                            sortField: {
-                                field: 'text',
-                                direction: 'asc'
-                            },
-                            placeholder: "Pilih Pasien",
-                            searchField: 'text',
-                            load: function(query, callback) {
-                                // Load data only when search query is entered
-                                if (query.length) {
-                                    // Fetch data from server or use the predefined options in the select box
-                                    const pasienData = @json(\App\Models\Pendaftaran::all());
-                                    const filteredPasien = pasienData.filter(function(pasien) {
-                                        return pasien.nama.toLowerCase().includes(query.toLowerCase());
-                                    });
-
-                                    // Callback to populate search results
-                                    callback(filteredPasien.map(function(pasien) {
-                                        return {
-                                            value: pasien.id,
-                                            text: pasien.nama
-                                        };
-                                    }));
-                                } else {
-                                    callback();
-                                }
-                            },
-                            onSearchChange: function(query) {
-                                if (query.length) {
-                                    this.load(query);
-                                }
-                            }
-                        });
-                    });
-                </script>
-
                 <div class="flex gap-3 justify-end mt-4">
-                    <button type="reset" class="btn">Reset</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="reset" class="btn border-none text-black hover:bg-neutral-focus">Reset</button>
+                    <button type="submit" class="btn btn-primary border-none text-black hover:bg-[#c97433]">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="flex gap-5">
+    <!-- ODONTOGRAM SECTION -->
+    <div class="flex flex-col gap-5 mt-5"
+         x-data="{ 
+            selections: [],
+            toggleSelection(tooth, surface, surfaceName) {
+                const index = this.selections.findIndex(s => s.tooth === tooth && s.surface === surface);
+                if (index > -1) {
+                    this.selections.splice(index, 1);
+                } else {
+                    this.selections.push({ tooth, surface, surfaceName });
+                }
+                
+                // Update inputs
+                document.getElementById('input_odontogram_selections').value = JSON.stringify(this.selections);
+                
+                const toothDisplay = Array.from(new Set(this.selections.map(s => s.tooth))).join(', ');
+                const surfaceDisplay = this.selections.map(s => s.surfaceName + '('+s.surface+')').join(', ');
+                
+                document.getElementById('display_tooth').value = toothDisplay ? 'Gigi: ' + toothDisplay : '';
+                document.getElementById('display_surface').value = surfaceDisplay ? surfaceDisplay : '';
+                
+                // Broadcast that selection changed to visually highlight the UI
+                window.dispatchEvent(new CustomEvent('tooth-selection-changed', { detail: this.selections }));
+            }
+         }"
+         @tooth-surface-clicked.window="toggleSelection($event.detail.tooth, $event.detail.surface, $event.detail.surfaceName)"
+    >
+        <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+            <div class="p-5 sm:p-7 rounded-t-xl border-b border-white/10" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
+                    Peta Gigi (Odontogram)
+                </h1>
+                <p class="text-sm opacity-60 text-black mt-1">
+                    Pilih permukaan gigi untuk mencatat tindakan medis spesifik pada Odontogram.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 p-4 bg-white/5 rounded-xl text-black">
+                    <div class="text-xs">
+                        <span class="font-bold">Urutan Penomoran:</span> FDI World Dental Federation System
+                    </div>
+                    <div class="flex flex-wrap gap-4 text-xs">
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-error rounded border border-white/20"></div> Karies</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-warning rounded border border-white/20"></div> Restorasi</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-info rounded border border-white/20"></div> Cabut</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-gray-500 rounded border border-white/20"></div> Lainnya</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 sm:p-7 flex justify-center pb-12 overflow-x-auto w-full rounded-b-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="flex flex-col items-center min-w-[700px] mx-auto relative px-4 text-gray-800">
+                    
+                    <div class="flex flex-col gap-8 w-full border-b border-gray-300 pb-12 relative pt-4">
+                        <div class="absolute bottom-[-14px] left-1/2 transform -translate-x-1/2 bg-white px-4 text-xs font-bold tracking-widest text-gray-500 uppercase rounded-full shadow-sm border border-gray-200 z-20">Atas • Bawah</div>
+                        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 transform -translate-x-1/2 z-0"></div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(18, 11) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(21, 28) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10 hidden-adult">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(55, 51) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(61, 65) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-8 w-full pt-12 relative pb-4">
+                        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-300 transform -translate-x-1/2 z-0"></div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10 hidden-adult">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(85, 81) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(71, 75) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(48, 41) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(31, 38) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL REMOVED - Odontogram now populates the main form directly -->
+    </div>
+
+    <!-- DATA TINDAKAN SECTION -->
+    <div class="flex gap-5 mt-5">
         @foreach (['data_tindakan'] as $item)
-            <div class="flex flex-col border-back bg-neutral rounded-xl w-full">
-                <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
-                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
+            <div class="flex flex-col border-back rounded-xl w-full" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                <div class="p-5 sm:p-7 rounded-t-xl" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
+                    <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-black">
                         {{ str_replace('_', ' ', $item) }}
                     </h1>
-                    <p class="text-sm opacity-60 text-white">
+                    <p class="text-sm opacity-60 text-black">
                         Jelajahi dan ketahui Tindakan.
                     </p>
                 </div>
                 <form action="{{ route('tindakan') }}" method="GET" class="w-full">
-                    <div class="w-full px-5 sm:px-7 bg-neutral my-4">
+                    <div class="w-full px-5 sm:px-7 my-4" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                         <input type="text" id="searchInput" placeholder="Cari data disini...." name="nama"
                             value="{{ request('nama') }}"
-                            class="input input-sm shadow-md w-full bg-neutral text-white">
+                            class="input input-sm shadow-md w-full text-black border-white/20" style="background-color: {{ $web_config->theme_colors['neutral'] }}">
                     </div>
                 </form>
 
-                <div class="flex flex-col rounded-b-xl gap-3 divide-y pt-0 p-5 sm:p-7">
+                <div class="flex flex-col rounded-b-xl gap-3 divide-y divide-white/10 pt-0 p-5 sm:p-7">
                     <div class="overflow-x-auto">
-                        <table class="table w-full text-white" id="dataTable">
+                        <table class="table w-full text-black" id="dataTable">
                             <thead class="text-sm">
-                                <tr class="text-white">
-                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'hari/tanggal', 'TD/BB', 'Pemeriksaan, Tindakan, dan Pengobatan', 'biaya'] as $header)
-                                        <th class="uppercase font-bold text-center">{{ $header }}
-                                        </th>
+                                <tr class="text-black border-b border-white/20">
+                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'hari/tanggal', 'TD/BB', 'Gigi/Bagian', 'Tindakan', 'biaya', 'Aksi'] as $header)
+                                        <th class="uppercase font-bold text-center">{{ $header }}</th>
                                     @endforeach
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($tindakan as $i => $item)
-                                    <tr>
+                                    <tr class="border-b border-white/10">
                                         <th class="font-semibold capitalize text-center">
                                             {{ $tindakan->firstItem() + $i }}</th>
                                         <td class="font-semibold capitalize text-center">
@@ -182,22 +269,25 @@
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->pendaftarans->nama }}</td>
                                         <td class="font-semibold capitalize text-center">
-                                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}
+                                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}</td>
                                         <td class="font-semibold capitalize text-center">
-                                            {{ $item->tensi_darah . '/' . $item->berat_badan . 'kg' }}</td>
+                                            {{ $item->tensi_darah . '/' . $item->berat_badan . 'kg' }}
+                                        </td>
+                                        <td class="font-semibold capitalize text-center text-primary">
+                                            {{ $item->tooth_number ? 'Gigi '.$item->tooth_number : '-' }}
                                         </td>
                                         <td class="font-semibold capitalize text-center">
-                                            {{ $item->opsi->nama }}</td>
+                                            {{ $item->opsi->nama ?? '-' }}
                                         </td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->biaya ? 'Rp' . number_format($item->biaya, 0, ',', '.') : '-' }}
                                         </td>
-                                        <td class="flex items-center gap-4">
+                                        <td class="flex items-center gap-4 justify-center">
                                             <x-lucide-pencil class="size-5 hover:stroke-yellow-500 cursor-pointer"
                                                 onclick="document.getElementById('update_modal_{{ $item->id }}').showModal();" />
                                             <dialog id="update_modal_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral text-white">
+                                                <div class="modal-box bg-neutral text-black border border-back">
                                                     <h3 class="text-lg font-bold">Update Tindakan</h3>
                                                     <div class="mt-3">
                                                         <form method="POST"
@@ -209,10 +299,10 @@
                                                             <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
                                                                 <div class="flex items-center gap-3">
                                                                     <label for="pasien_{{ $item->id }}"
-                                                                        class="text-md font-medium text-white dark:text-white w-32">Pasien</label>
+                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Pasien</label>
                                                                     <select id="pasien_{{ $item->id }}"
                                                                         name="pasien"
-                                                                        class="searchable-select bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
+                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('pasien') border-red-500 @enderror">
                                                                         <option value="">Pilih Pasien</option>
                                                                         @foreach (\App\Models\Pendaftaran::all() as $pasien)
                                                                             <option value="{{ $pasien->id }}"
@@ -221,17 +311,13 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
-                                                                    @error('pasien')
-                                                                        <span
-                                                                            class="text-red-500 text-md">{{ $message }}</span>
-                                                                    @enderror
                                                                 </div>
 
                                                                 @foreach (['tanggal', 'TD/BB'] as $type)
                                                                     <div class="flex items-center gap-3">
                                                                         <label
                                                                             for="{{ $type }}_{{ $item->id }}"
-                                                                            class="text-md font-medium text-white dark:text-white w-32">
+                                                                            class="text-md font-medium text-black dark:text-black w-32 text-left">
                                                                             {{ ucfirst(str_replace('_', ' ', $type)) }}
                                                                         </label>
                                                                         @if ($type == 'tanggal')
@@ -249,7 +335,7 @@
                                                                                     placeholder="Masukan TD..."
                                                                                     class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 w-full @error('td') border-red-500 @enderror"
                                                                                     value="{{ old('td', $item->tensi_darah) }}" />
-                                                                                <span class="text-white">/</span>
+                                                                                <span class="text-black">/</span>
                                                                                 <input type="number"
                                                                                     id="bb_{{ $item->id }}"
                                                                                     name="bb"
@@ -258,16 +344,12 @@
                                                                                     value="{{ old('bb', $item->berat_badan) }}" />
                                                                             </div>
                                                                         @endif
-                                                                        @error($type)
-                                                                            <span
-                                                                                class="text-red-500 text-md">{{ $message }}</span>
-                                                                        @enderror
                                                                     </div>
                                                                 @endforeach
 
                                                                 <div class="flex items-center gap-3">
                                                                     <label for="tindakan_{{ $item->id }}"
-                                                                        class="text-md font-medium text-white dark:text-white w-32">Tindakan</label>
+                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Tindakan</label>
                                                                     <select id="tindakan_{{ $item->id }}"
                                                                         name="tindakan"
                                                                         class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5 flex-1 @error('tindakan') border-red-500 @enderror">
@@ -279,15 +361,11 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
-                                                                    @error('tindakan')
-                                                                        <span
-                                                                            class="text-red-500 text-md">{{ $message }}</span>
-                                                                    @enderror
                                                                 </div>
 
                                                                 <div class="flex items-center gap-3">
                                                                     <label for="biaya_{{ $item->id }}"
-                                                                        class="text-md font-medium text-white dark:text-white w-32">Biaya</label>
+                                                                        class="text-md font-medium text-black dark:text-black w-32 text-left">Biaya</label>
                                                                     <input type="text"
                                                                         id="biaya_{{ $item->id }}"
                                                                         name="formatted_biaya"
@@ -299,19 +377,15 @@
                                                                         id="biaya_raw_{{ $item->id }}"
                                                                         name="biaya"
                                                                         value="{{ old('biaya', $item->biaya) }}" />
-                                                                    @error('biaya')
-                                                                        <span
-                                                                            class="text-red-500 text-md">{{ $message }}</span>
-                                                                    @enderror
                                                                 </div>
                                                             </div>
 
                                                             <div class="modal-action">
                                                                 <button type="button"
                                                                     onclick="document.getElementById('update_modal_{{ $item->id }}').close()"
-                                                                    class="btn">Batal</button>
+                                                                    class="btn border-none text-black hover:bg-neutral-focus">Batal</button>
                                                                 <button type="submit"
-                                                                    class="btn btn-primary">Simpan</button>
+                                                                    class="btn btn-primary border-none text-black hover:bg-[#c97433]">Simpan</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -322,29 +396,27 @@
                                                 onclick="document.getElementById('hapus_{{ $item->id }}').showModal();" />
                                             <dialog id="hapus_{{ $item->id }}"
                                                 class="modal modal-bottom sm:modal-middle">
-                                                <div class="modal-box bg-neutral">
-                                                    <h3 class="text-lg text-white font-bold capitalize">Hapus
+                                                <div class="modal-box bg-neutral border border-back text-left">
+                                                    <h3 class="text-lg text-black font-bold capitalize">Hapus
                                                         tindakan
                                                     </h3>
                                                     <div class="mt-3">
-                                                        <p class="text-red-800 font-semibold">Perhatian! Anda
+                                                        <p class="text-red-400 font-semibold mb-2">Perhatian! Anda
                                                             sedang
                                                             mencoba untuk menghapus data tindakan
-                                                            <span class="text-white">Tindakan ini akan menghapus
-                                                                semua data terkait. Apakah Anda yakin ingin
-                                                                melanjutkan?</span>
                                                         </p>
+                                                        <p class="text-black text-sm">Tindakan ini akan menghapus semua data terkait secara permanen. Apakah Anda yakin ingin melanjutkan?</p>
                                                     </div>
                                                     <div class="modal-action">
                                                         <button type="button"
                                                             onclick="document.getElementById('hapus_{{ $item->id }}').close()"
-                                                            class="btn">Batal</button>
+                                                            class="btn border-none hover:bg-neutral-focus text-black">Batal</button>
                                                         <form action="{{ route('delete.tindakan', $item->id) }}"
                                                             method="POST" class="inline-block">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
-                                                                class="btn btn-error">Hapus</button>
+                                                                class="btn btn-error border-none text-black">Ya, Hapus</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -353,13 +425,13 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="font-semibold capitalize text-center" colspan="7">
-                                            Tidak ada tindakan terdaftar</td>
+                                        <td class="font-semibold capitalize text-center" colspan="9">
+                                            Tidak ada data tindakan terdaftar</td>
                                     </tr>
                                 @endforelse
                         </table>
                         <div class="mt-4">
-                            {{ $tindakan->links('vendor.pagination') }}
+                            {{ $tindakan->links('vendor.pagination.tailwind') }}
                         </div>
                     </div>
                 </div>
@@ -367,48 +439,146 @@
         @endforeach
     </div>
 
+    <style>
+        /* Override Select2 default styling to mimic Tailwind's 'bg-gray-300 border-gray-300 text-gray-900 rounded-lg p-2.5 flex-1' */
+        .select2-container .select2-selection--single {
+            background-color: #D1D5DB !important; /* bg-gray-300 */
+            border: 1px solid #D1D5DB !important; /* border-gray-300 */
+            border-radius: 0.5rem !important; /* rounded-lg */
+            height: auto !important; /* let padding define height */
+            padding: 0.625rem !important; /* p-2.5 */
+            display: flex;
+            align-items: center;
+        }
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            color: #111827 !important; /* text-gray-900 */
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            line-height: normal !important;
+        }
+        .select2-container .select2-selection--single .select2-selection__arrow {
+            height: 100% !important;
+            right: 0.75rem !important;
+        }
+        .select2-container {
+            flex: 1 1 0%;
+            width: 100% !important;
+        }
+        .select2-dropdown {
+            background-color: #E5E7EB !important; /* bg-gray-200 */
+            border: 1px solid #D1D5DB !important;
+            border-radius: 0.5rem !important;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #c97433 !important; /* Match text-primary/hover theme */
+            color: white !important;
+        }
+        .select2-search__field {
+            border-radius: 0.375rem !important;
+            border: 1px solid #9CA3AF !important;
+            background-color: white !important;
+            padding: 0.4rem !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #4B5563 !important; /* text-gray-600 */
+        }
+        .select2-search--dropdown {
+            padding: 0.5rem !important;
+        }
+    </style>
+
+    <!-- SCRIPTS FOR FORMATTING & SEARCH -->
     <script>
-        const searchInput = document.getElementById('searchInput');
-        const dataTable = document.getElementById('dataTable');
-        const tableRows = dataTable.querySelectorAll('tbody tr');
-        const noDataRow = document.createElement('tr');
-        const noDataCell = document.createElement('td');
+        function formatRupiah(element) {
+            let value = element.value.replace(/[^,\d]/g, '');
+            let split = value.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/g);
 
-        noDataCell.colSpan = tableRows[0].cells.length;
-        noDataCell.textContent = 'Data tidak ditemukan';
-        noDataRow.appendChild(noDataCell);
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
 
-        searchInput.addEventListener('keyup', function() {
-            const query = searchInput.value.toLowerCase();
-            let rowVisible = false;
+            element.value = 'Rp' + (split[1] !== undefined ? rupiah + ',' + split[1] : rupiah);
+            
+            // Nge-update input hidden biar masuk database raw integer
+            let hiddenInputId = element.id + '_raw'; 
+            if(document.getElementById(hiddenInputId)) {
+                document.getElementById(hiddenInputId).value = value;
+            } else if (element.nextElementSibling && element.nextElementSibling.type === 'hidden') {
+                element.nextElementSibling.value = value;
+            }
+        }
 
-            tableRows.forEach(row => {
-                let rowMatch = false;
-
-                for (let i = 0; i < row.cells.length; i++) {
-                    const cellText = row.cells[i].textContent.toLowerCase();
-
-                    if (cellText.includes(query)) {
-                        rowMatch = true;
-                        break;
+        document.addEventListener('DOMContentLoaded', function() {
+            if ($('#pasien').length) {
+                $('#pasien').select2({
+                    placeholder: "Cari Nama atau No Rekam Medis...",
+                    allowClear: true,
+                    width: '100%'
+                }).on('select2:select', function (e) {
+                    let value = e.params.data.id;
+                    if (value) {
+                        fetch(`/dashboard/tindakan/odontogram/${value}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                window.dispatchEvent(new CustomEvent('odontogram-loaded', { detail: data }));
+                            })
+                            .catch(err => console.error("Error fetching odontogram data:", err));
                     }
-                }
+                }).on('select2:clear', function() {
+                    window.dispatchEvent(new CustomEvent('odontogram-loaded', { detail: {} }));
+                });
+            }
 
-                if (rowMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-                rowVisible = rowVisible || rowMatch;
-            });
+            const searchInput = document.getElementById('searchInput');
+            const dataTable = document.getElementById('dataTable');
+            if (searchInput && dataTable) {
+                const tableRows = dataTable.querySelectorAll('tbody tr');
+                const noDataRow = document.createElement('tr');
+                const noDataCell = document.createElement('td');
 
-            if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
-                noDataRow.setAttribute('data-no-data', 'true');
-                dataTable.querySelector('tbody').appendChild(noDataRow);
-            } else if (rowVisible && dataTable.querySelector('tbody tr[data-no-data]')) {
-                dataTable.querySelector('tbody tr[data-no-data]').remove();
+                noDataCell.colSpan = dataTable.querySelectorAll('thead th').length;
+                noDataCell.textContent = 'Data tidak ditemukan';
+                noDataCell.className = "text-center py-4 font-semibold text-black/50";
+                noDataRow.appendChild(noDataCell);
+
+                searchInput.addEventListener('keyup', function() {
+                    const query = searchInput.value.toLowerCase();
+                    let rowVisible = false;
+
+                    tableRows.forEach(row => {
+                        let rowMatch = false;
+
+                        for (let i = 0; i < row.cells.length - 1; i++) { // Skip the 'Aksi' column
+                            const cellText = row.cells[i].textContent.toLowerCase();
+
+                            if (cellText.includes(query)) {
+                                rowMatch = true;
+                                break;
+                            }
+                        }
+
+                        if (rowMatch) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                        rowVisible = rowVisible || rowMatch;
+                    });
+
+                    if (!rowVisible && !dataTable.querySelector('tbody tr[data-no-data]')) {
+                        noDataRow.setAttribute('data-no-data', 'true');
+                        dataTable.querySelector('tbody').appendChild(noDataRow);
+                    } else if (rowVisible && dataTable.querySelector('tbody tr[data-no-data]')) {
+                        dataTable.querySelector('tbody tr[data-no-data]').remove();
+                    }
+                });
             }
         });
     </script>
-
 </x-dashboard.main>

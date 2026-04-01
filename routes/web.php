@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\OpsiTindakanController;
+use App\Http\Controllers\ThemeSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/tindakan/store', [TindakanController::class, 'store'])->name('store.tindakan');
     Route::put('/dashboard/tindakan/{id}/update', [TindakanController::class, 'update'])->name('update.tindakan');
     Route::delete('/dashboard/tindakan/{id}/delete', [TindakanController::class, 'destroy'])->name('delete.tindakan');
+    Route::get('/dashboard/tindakan/odontogram/{id}', [TindakanController::class, 'getOdontogram'])->name('get.odontogram');
 
     Route::get('/dashboard/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran');
     Route::post('/dashboard/pengeluaran/post', [PengeluaranController::class, 'store'])->name('store.pengeluaran');
@@ -52,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/dashboard/opsi_tindakan/{id}/delete', [OpsiTindakanController::class, 'destroy'])->name('delete.opsi_tindakan');
 
     Route::get('/dashboard/laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::get('/dashboard/theme_setting', [ThemeSettingController::class, 'index'])->name('theme_setting')->middleware('role:super admin');
+    Route::post('/dashboard/theme_setting/update', [ThemeSettingController::class, 'update'])->name('update.theme_setting')->middleware('role:super admin');
     Route::get('/dashboard/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
 
     // Untuk mendownload PDF yang sudah dibuat
