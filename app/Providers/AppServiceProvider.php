@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (Schema::hasTable('settings')) {
-            
+
             $web_settings = Setting::first() ?? new Setting([
                 'nama_klinik' => 'Klinik Default',
                 'theme_colors' => [
@@ -35,6 +35,13 @@ class AppServiceProvider extends ServiceProvider
             ]);
 
             View::share('web_config', $web_settings);
+
+            config(['app.name' => $web_settings->nama_klinik]);
+            config(['mail.from.name' => $web_settings->nama_klinik]);
+            config(['mail.from.address' => $web_settings->email]);
+            config(['nativephp.author' => "Ivan Hanifdeal"]);
+            config(['nativephp.description' => "Sistem Rekam Medis - " . $web_settings->nama_klinik]);
+            config(['nativephp.copyright' => "© " . date('Y') . " " . $web_settings->nama_klinik]);
         }
     }
 }
