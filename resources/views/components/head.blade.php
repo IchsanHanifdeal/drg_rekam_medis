@@ -26,9 +26,16 @@
     <meta name="twitter:description" content="Dapatkan perawatan gigi terbaik di SDC Dental Clinic Batusangkar. Ahli dalam scaling, filling, braces, dan banyak lagi. Senyum sehat dimulai di sini!">
     <meta name="twitter:image" content="{{ asset('image/social-share-image.jpg') }}"> {{-- Use the same social share image --}}
 
-    {{-- Favicon --}}
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link rel="manifest" href="/manifest.json"> {{-- Ensure this path is correct if you have a PWA manifest --}}
+    {{-- PWA Manifest & Icons --}}
+    @laravelPWA
+    <script>
+        window.deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.deferredPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwa-installable'));
+        });
+    </script>
 
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,4 +81,7 @@
 
     {{-- Custom JavaScript (Vite) --}}
     @vite('resources/js/app.js')
+
+    {{-- Alpine.js for Odontogram interactivity --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>

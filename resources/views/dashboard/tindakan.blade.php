@@ -49,6 +49,24 @@
                     @endforeach
 
                     <div class="flex items-center gap-3">
+                        <label class="text-md font-medium text-white dark:text-white w-32">Odontogram</label>
+                        <div class="flex flex-1 gap-2 flex-col sm:flex-row items-stretch sm:items-center">
+                            <div class="flex gap-2 flex-1">
+                                <input type="text" id="display_tooth" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3 placeholder-gray-600" placeholder="Pilih Gigi di Peta..." readonly />
+                                <input type="text" id="display_surface" class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg p-2.5 w-1/2 sm:w-1/3 placeholder-gray-600" placeholder="Permukaan..." readonly />
+                            </div>
+                            <select name="condition_code" id="condition_code" onchange="window.dispatchEvent(new CustomEvent('condition-code-changed', { detail: this.value }))" class="bg-gray-300 border border-red-300 text-gray-900 rounded-lg focus:ring-red-500 p-2.5 flex-1 font-semibold">
+                                <option value="" selected>Kondisi Gigi (Opsional)</option>
+                                <option value="karies">Karies</option>
+                                <option value="restorasi">Restorasi</option>
+                                <option value="cabut">Missing / Cabut</option>
+                                <option value="lainnya">Sehat / Lainnya</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="odontogram_selections" id="input_odontogram_selections" value="[]" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
                         <label for="tindakan"
                             class="text-md font-medium text-white dark:text-white w-32">Tindakan</label>
                         <select id="tindakan" name="tindakan"
@@ -129,6 +147,18 @@
                                 if (query.length) {
                                     this.load(query);
                                 }
+                            },
+                            onChange: function(value) {
+                                if (value) {
+                                    fetch(`/dashboard/tindakan/odontogram/${value}`)
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            window.dispatchEvent(new CustomEvent('odontogram-loaded', { detail: data }));
+                                        })
+                                        .catch(err => console.error("Error fetching odontogram data:", err));
+                                } else {
+                                    window.dispatchEvent(new CustomEvent('odontogram-loaded', { detail: {} }));
+                                }
                             }
                         });
                     });
@@ -139,6 +169,124 @@
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- ODONTOGRAM SECTION -->
+    <div class="flex flex-col gap-5 mt-5"
+         x-data="{ 
+            selections: [],
+            toggleSelection(tooth, surface, surfaceName) {
+                const index = this.selections.findIndex(s => s.tooth === tooth && s.surface === surface);
+                if (index > -1) {
+                    this.selections.splice(index, 1);
+                } else {
+                    this.selections.push({ tooth, surface, surfaceName });
+                }
+                
+                // Update inputs
+                document.getElementById('input_odontogram_selections').value = JSON.stringify(this.selections);
+                
+                const toothDisplay = Array.from(new Set(this.selections.map(s => s.tooth))).join(', ');
+                const surfaceDisplay = this.selections.map(s => s.surfaceName + '('+s.surface+')').join(', ');
+                
+                document.getElementById('display_tooth').value = toothDisplay ? 'Gigi: ' + toothDisplay : '';
+                document.getElementById('display_surface').value = surfaceDisplay ? surfaceDisplay : '';
+                
+                // Broadcast that selection changed to visually highlight the UI
+                window.dispatchEvent(new CustomEvent('tooth-selection-changed', { detail: this.selections }));
+            }
+         }"
+         @tooth-surface-clicked.window="toggleSelection($event.detail.tooth, $event.detail.surface, $event.detail.surfaceName)"
+    >
+        <div class="flex flex-col border-back rounded-xl w-full bg-neutral">
+            <div class="p-5 sm:p-7 bg-neutral rounded-t-xl">
+                <h1 class="flex items-start gap-3 font-semibold font-[onest] text-lg capitalize text-white">
+                    Peta Gigi (Odontogram)
+                </h1>
+                <p class="text-sm opacity-60 text-white mt-1">
+                    Pilih permukaan gigi untuk mencatat tindakan medis spesifik pada Odontogram.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 p-4 bg-white/5 rounded-xl text-white">
+                    <div class="text-xs">
+                        <span class="font-bold">Urutan Penomoran:</span> FDI World Dental Federation System
+                    </div>
+                    <div class="flex flex-wrap gap-4 text-xs">
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-error rounded border border-white/20"></div> Karies</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-warning rounded border border-white/20"></div> Restorasi</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-info rounded border border-white/20"></div> Cabut</div>
+                        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-gray-500 rounded border border-white/20"></div> Sehat / Lainnya</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-5 sm:p-7 flex justify-center pb-12 overflow-x-auto w-full bg-neutral rounded-b-xl">
+                <div class="flex flex-col items-center min-w-[700px] mx-auto relative px-4 text-white">
+                    
+                    <div class="flex flex-col gap-8 w-full border-b border-white/10 pb-12 relative pt-4">
+                        <div class="absolute bottom-[-14px] left-1/2 transform -translate-x-1/2 bg-neutral px-4 text-xs font-bold tracking-widest text-white uppercase rounded-full shadow-sm border border-white/10 z-20">Atas • Bawah</div>
+                        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 transform -translate-x-1/2 z-0"></div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(18, 11) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(21, 28) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(55, 51) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(61, 65) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-8 w-full pt-12 relative pb-4">
+                        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 transform -translate-x-1/2 z-0"></div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(85, 81) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(71, 75) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" :is-deciduous="true" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center gap-6 sm:gap-8 w-full relative z-10">
+                            <div class="flex flex-1 justify-end gap-1.5 sm:gap-2">
+                                @foreach (range(48, 41) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                            <div class="flex flex-1 justify-start gap-1.5 sm:gap-2">
+                                @foreach (range(31, 38) as $toothNumber)
+                                    <div class="w-max shrink-0"><x-odontogram-tooth :number="$toothNumber" /></div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -166,7 +314,7 @@
                         <table class="table w-full text-white" id="dataTable">
                             <thead class="text-sm">
                                 <tr class="text-white">
-                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'hari/tanggal', 'TD/BB', 'Pemeriksaan, Tindakan, dan Pengobatan', 'biaya'] as $header)
+                                    @foreach (['No', 'Nomor Rekam Medis', 'Nama', 'hari/tanggal', 'TD/BB', 'Gigi/Bagian', 'Pemeriksaan, Tindakan, dan Pengobatan', 'biaya', 'Aksi'] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}
                                         </th>
                                     @endforeach
@@ -183,11 +331,15 @@
                                             {{ $item->pendaftarans->nama }}</td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd/DD-MM-YYYY') : '-' }}
-                                        <td class="font-semibold capitalize text-center">
-                                            {{ $item->tensi_darah . '/' . $item->berat_badan . 'kg' }}</td>
                                         </td>
                                         <td class="font-semibold capitalize text-center">
-                                            {{ $item->opsi->nama }}</td>
+                                            {{ ($item->tensi_darah ?? '-') . '/' . ($item->berat_badan ? $item->berat_badan . 'kg' : '-') }}
+                                        </td>
+                                        <td class="font-semibold capitalize text-center">
+                                            {{ $item->tooth_number ? 'Gigi ' . $item->tooth_number : '-' }}
+                                        </td>
+                                        <td class="font-semibold capitalize text-center">
+                                            {{ $item->opsi->nama }}
                                         </td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->biaya ? 'Rp' . number_format($item->biaya, 0, ',', '.') : '-' }}

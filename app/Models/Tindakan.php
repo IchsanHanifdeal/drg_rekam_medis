@@ -9,7 +9,7 @@ class Tindakan extends Model
 {
     use HasFactory;
     protected $table = 'tindakan';
-    protected $fillable = ['pendaftaran', 'tanggal', 'tensi_darah', 'berat_badan', 'biaya', 'opsi_tindakan'];
+    protected $fillable = ['pendaftaran', 'tanggal', 'tensi_darah', 'berat_badan', 'biaya', 'opsi_tindakan', 'tooth_number'];
 
     public function pendaftarans()
     {

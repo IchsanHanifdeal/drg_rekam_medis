@@ -171,7 +171,7 @@ class PendaftaranController extends Controller
     {
         $searchTerm = $request->input('nama');
 
-        $pendaftaranQuery = Pendaftaran::query();
+        $pendaftaranQuery = Pendaftaran::query()->with('tindakans.opsi');
 
         if ($searchTerm) {
             $pendaftaranQuery->where('nama', 'like', '%' . $searchTerm . '%');
@@ -183,7 +183,6 @@ class PendaftaranController extends Controller
 
         return view('dashboard.pasien', [
             'pendaftaran' => $pendaftarans,
-            'tindakan' => Tindakan::all(),
         ]);
     }
 }

@@ -44,7 +44,7 @@
                                 @forelse ($OpsiTindakan as $i => $item)
                                     <tr>
                                         <th class="font-semibold capitalize text-center">
-                                            {{ $i + 1 }}</th>
+                                            {{ $OpsiTindakan->firstItem() + $i }}</th>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->nama }}</td>
                                         <td class="font-semibold capitalize text-center">
@@ -143,6 +143,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-4 flex justify-center">
+                            {{ $OpsiTindakan->links('vendor.pagination') }}
+                        </div>
                     </div>
                 </div>
             </div>

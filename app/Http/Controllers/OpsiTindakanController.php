@@ -14,7 +14,7 @@ class OpsiTindakanController extends Controller
     public function index()
     {
         return view('dashboard.opsi_tindakan', [
-            'OpsiTindakan' => OpsiTindakan::all(),
+            'OpsiTindakan' => OpsiTindakan::orderBy('created_at', 'desc')->paginate(10),
         ]);
     }
 

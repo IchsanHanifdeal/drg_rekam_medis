@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/tindakan/store', [TindakanController::class, 'store'])->name('store.tindakan');
     Route::put('/dashboard/tindakan/{id}/update', [TindakanController::class, 'update'])->name('update.tindakan');
     Route::delete('/dashboard/tindakan/{id}/delete', [TindakanController::class, 'destroy'])->name('delete.tindakan');
+    Route::get('/dashboard/tindakan/odontogram/{id}', [TindakanController::class, 'getOdontogram'])->name('get.odontogram');
 
     Route::get('/dashboard/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran');
     Route::post('/dashboard/pengeluaran/post', [PengeluaranController::class, 'store'])->name('store.pengeluaran');
@@ -62,4 +63,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/pasien', [PendaftaranController::class, 'pasien'])->name('pasien');
     Route::get('/dashboard/pemasukan/filter', [DashboardController::class, 'filterAjax'])->name('pemasukan.filter.ajax');
+    Route::get('/dashboard/pemasukan-harian', [DashboardController::class, 'pemasukanHarian'])->name('pemasukan_harian');
 });

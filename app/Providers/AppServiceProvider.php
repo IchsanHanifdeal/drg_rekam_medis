@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (!app()->runningInConsole()) {
+            if (str_contains(request()->getHost(), 'ngrok')) {
+                \Illuminate\Support\Facades\Vite::useHotFile(public_path('non-existent-hot-file'));
+            }
+        }
     }
 }

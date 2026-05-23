@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tindakan;
 use App\Models\Pendaftaran;
+use App\Models\Odotograms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -66,6 +67,9 @@ class TindakanController extends Controller
                 'biaya.required' => 'Biaya wajib diisi.',
             ]);
 
+            $selections = json_decode($request->input('odontogram_selections', '[]'), true);
+            $toothNumbersStr = !empty($selections) ? collect($selections)->pluck('tooth')->unique()->implode(', ') : null;
+
             $tindakan = Tindakan::create([
                 'pendaftaran' => $validatedData['pasien'],
                 'tanggal' => $validatedData['tanggal'],
@@ -73,7 +77,19 @@ class TindakanController extends Controller
                 'berat_badan' => $validatedData['bb'],
                 'opsi_tindakan' => $validatedData['tindakan'],
                 'biaya' => $validatedData['biaya'],
+                'tooth_number' => $toothNumbersStr,
             ]);
+
+            if (!empty($selections) && $request->filled('condition_code')) {
+                foreach ($selections as $sel) {
+                    Odotograms::create([
+                        'pendaftaran_id' => $validatedData['pasien'],
+                        'tooth_number' => $sel['tooth'],
+                        'condition_code' => $request->input('condition_code'),
+                        'surface' => $sel['surface'],
+                    ]);
+                }
+            }
 
             if (!$tindakan) {
                 throw new \Exception('Gagal menyimpan data tindakan.');
@@ -180,6 +196,12 @@ class TindakanController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
+    }
+
+    public function getOdontogram($id)
+    {
+        $odontograms = Odotograms::where('pendaftaran_id', $id)->get()->groupBy('tooth_number');
+        return response()->json($odontograms);
     }
 
     public function filterAjax(Request $request)

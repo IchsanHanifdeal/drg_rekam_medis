@@ -79,6 +79,33 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function pemasukanHarian(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = Tindakan::query()
+            ->select('tanggal', \DB::raw('SUM(CAST(biaya AS UNSIGNED)) as total_pemasukan'), \DB::raw('COUNT(id) as total_tindakan'))
+            ->groupBy('tanggal')
+            ->orderBy('tanggal', 'desc');
+
+        if ($startDate) {
+            $query->where('tanggal', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->where('tanggal', '<=', $endDate);
+        }
+
+        $pemasukanHarian = $query->paginate(10);
+        $pemasukanHarian->appends($request->all());
+
+        return view('dashboard.pemasukan_harian', [
+            'pemasukanHarian' => $pemasukanHarian,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

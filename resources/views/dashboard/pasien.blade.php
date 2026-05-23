@@ -172,28 +172,32 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($tindakan as $index => $data)
-                                                                    @if ($data->pendaftaran === $item->id)
-                                                                        <tr>
-                                                                            <td
-                                                                                class="font-semibold capitalize text-center">
-                                                                                {{ $data->tanggal }}</td>
-                                                                            <td
-                                                                                class="font-semibold capitalize text-center">
-                                                                                {{ $data->tensi_darah }}</td>
-                                                                            <td
-                                                                                class="font-semibold capitalize text-center">
-                                                                                {{ $data->berat_badan }} kg</td>
-                                                                            <td
-                                                                                class="font-semibold capitalize text-center">
-                                                                                {{ $data->biaya ? 'Rp' . number_format($data->biaya, 0, ',', '.') : '-' }}
-                                                                            </td>
-                                                                            <td
-                                                                                class="font-semibold capitalize text-center">
-                                                                                {{ $data->opsi->nama }}</td>
-                                                                        </tr>
-                                                                    @endif
-                                                                @endforeach
+                                                                @forelse ($item->tindakans as $index => $data)
+                                                                    <tr>
+                                                                        <td
+                                                                            class="font-semibold capitalize text-center">
+                                                                            {{ $data->tanggal }}</td>
+                                                                        <td
+                                                                            class="font-semibold capitalize text-center">
+                                                                            {{ $data->tensi_darah }}</td>
+                                                                        <td
+                                                                            class="font-semibold capitalize text-center">
+                                                                            {{ $data->berat_badan }} kg</td>
+                                                                        <td
+                                                                            class="font-semibold capitalize text-center">
+                                                                            {{ $data->biaya ? 'Rp' . number_format($data->biaya, 0, ',', '.') : '-' }}
+                                                                        </td>
+                                                                        <td
+                                                                            class="font-semibold capitalize text-center">
+                                                                            {{ $data->opsi->nama }}</td>
+                                                                    </tr>
+                                                                @empty
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center py-4 text-gray-400">
+                                                                            Belum ada riwayat tindakan medis untuk pasien ini.
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforelse
                                                             </tbody>
                                                         </table>
                                                     </div>

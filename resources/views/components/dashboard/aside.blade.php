@@ -42,6 +42,12 @@
                 </a>
             </li>
             <li class="my-2">
+                <a href="{{ route('pemasukan_harian') }}"
+                    class="{{ Str::startsWith(Request::path(), 'dashboard/pemasukan-harian') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
+                    <x-lucide-trending-up /> Pemasukan per Hari
+                </a>
+            </li>
+            <li class="my-2">
                 <a href="{{ route('laporan') }}"
                     class="{{ Str::startsWith(Request::path(), 'dashboard/laporan') ? 'bg-[#aa8f55] text-white rounded px-2.5' : '' }} flex items-center px-2.5 font-semibold">
                     <x-lucide-clipboard-list /> Laporan
