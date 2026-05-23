@@ -25,6 +25,7 @@ class OpsiTindakanSeeder extends Seeder
             ['nama' => 'Gigi Palsu', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['nama' => 'Bleaching', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['nama' => 'GTC', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['nama' => 'Pencabutan Gigi Susu', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
     }
 }
