@@ -19,9 +19,40 @@ class DashboardController extends Controller
 
         // Data Pendaftar
         $pendaftar = Pendaftaran::orderBy('created_at', 'desc')->get();
-        $dailyPatients = $pendaftar->groupBy(function ($item) {
-            return Carbon::parse($item->created_at)->format('Y-m-d');
-        })->map->count()->toArray();
+
+        // Membuat data deret waktu 7 hari terakhir untuk grafik fungsional
+        $last7Days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $last7Days[now()->subDays($i)->format('Y-m-d')] = [
+                'pendaftaran' => 0,
+                'tindakan' => 0
+            ];
+        }
+
+        foreach ($pendaftar as $item) {
+            $date = Carbon::parse($item->created_at)->format('Y-m-d');
+            if (isset($last7Days[$date])) {
+                $last7Days[$date]['pendaftaran']++;
+            }
+        }
+
+        $tindakans = Tindakan::where('tanggal', '>=', now()->subDays(6)->format('Y-m-d'))->get();
+        foreach ($tindakans as $item) {
+            $date = Carbon::parse($item->tanggal)->format('Y-m-d');
+            if (isset($last7Days[$date])) {
+                $last7Days[$date]['tindakan']++;
+            }
+        }
+
+        $chartLabels = [];
+        $chartPendaftaran = [];
+        $chartTindakan = [];
+
+        foreach ($last7Days as $date => $counts) {
+            $chartLabels[] = Carbon::parse($date)->translatedFormat('d M');
+            $chartPendaftaran[] = $counts['pendaftaran'];
+            $chartTindakan[] = $counts['tindakan'];
+        }
 
         // Aktivitas terbaru
         $recentActivities = collect()
@@ -58,7 +89,9 @@ class DashboardController extends Controller
         // Data untuk tampilan
         return view('dashboard.index', [
             'pendaftar' => $pendaftar,
-            'dailyPatients' => $dailyPatients,
+            'chartLabels' => $chartLabels,
+            'chartPendaftaran' => $chartPendaftaran,
+            'chartTindakan' => $chartTindakan,
             'tindakan' => Tindakan::all(),
             'pemasukan' => Tindakan::whereMonth('tanggal', $bulanIni)
                 ->whereYear('tanggal', $tahunIni)

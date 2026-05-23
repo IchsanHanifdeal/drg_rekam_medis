@@ -67,14 +67,30 @@
 
         <!-- Grafik dan Informasi -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Grafik -->
-            <div class="card shadow-lg bg-base-100 border border-base-300">
-                <div class="card-body">
-                    <h2 class="card-title">Grafik Pasien</h2>
-                    <div class="mockup-window border bg-base-200">
-                        <div class="flex justify-center bg-base-100">
-                            <canvas id="chart-kunjungan" class="w-full max-w-[90%] h-64"></canvas>
+            <!-- Grafik Statistik -->
+            <div class="card shadow-lg bg-[#eae3cd] border border-[#aa8f55]/30 text-[#333333]">
+                <div class="card-body p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-[#aa8f55] flex items-center gap-2">
+                                <x-lucide-trending-up class="w-5 h-5 stroke-[2.5]" />
+                                <span>Aktivitas Pasien & Tindakan</span>
+                            </h2>
+                            <p class="text-xs opacity-75 mt-0.5 font-[onest]">Statistik pendaftaran pasien baru & tindakan medis (7 hari terakhir)</p>
                         </div>
+                        <div class="flex items-center gap-3 text-xs font-[onest]">
+                            <span class="flex items-center gap-1.5 font-semibold">
+                                <span class="w-3 h-3 rounded-full bg-[#aa8f55]"></span>
+                                <span>Pasien Baru</span>
+                            </span>
+                            <span class="flex items-center gap-1.5 font-semibold">
+                                <span class="w-3 h-3 rounded-full bg-[#14b8a6]"></span>
+                                <span>Tindakan</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="relative w-full bg-white/40 backdrop-blur rounded-xl p-3 border border-[#aa8f55]/10 h-72">
+                        <canvas id="chart-kunjungan" class="w-full h-full"></canvas>
                     </div>
                 </div>
             </div>
@@ -137,41 +153,102 @@
     </div>
 
     <script>
-        const labels = @json(array_keys($dailyPatients));
-        const data = @json(array_values($dailyPatients));
+        const labels = @json($chartLabels);
+        const pendaftaranData = @json($chartPendaftaran);
+        const tindakanData = @json($chartTindakan);
 
         const ctx = document.getElementById('chart-kunjungan').getContext('2d');
+        
+        // Create custom gradients for a highly premium look!
+        const gradientPendaftaran = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientPendaftaran.addColorStop(0, 'rgba(170, 143, 85, 0.4)');
+        gradientPendaftaran.addColorStop(1, 'rgba(170, 143, 85, 0.0)');
+
+        const gradientTindakan = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientTindakan.addColorStop(0, 'rgba(20, 184, 166, 0.4)');
+        gradientTindakan.addColorStop(1, 'rgba(20, 184, 166, 0.0)');
+
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Jumlah Pasien',
-                    data: data,
-                    borderColor: '#aa8f55',
-                    backgroundColor: 'rgba(170, 143, 85, 0.2)',
-                    tension: 0.4,
-                }],
+                datasets: [
+                    {
+                        label: 'Pasien Baru',
+                        data: pendaftaranData,
+                        borderColor: '#aa8f55',
+                        backgroundColor: gradientPendaftaran,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#aa8f55',
+                        pointHoverRadius: 7,
+                        pointRadius: 4,
+                    },
+                    {
+                        label: 'Tindakan',
+                        data: tindakanData,
+                        borderColor: '#14b8a6',
+                        backgroundColor: gradientTindakan,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#14b8a6',
+                        pointHoverRadius: 7,
+                        pointRadius: 4,
+                    }
+                ],
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: true,
+                        display: false, // We use our custom legend in HTML!
                     },
+                    tooltip: {
+                        backgroundColor: '#eae3cd',
+                        titleColor: '#aa8f55',
+                        bodyColor: '#333333',
+                        borderColor: '#aa8f55',
+                        borderWidth: 1,
+                        padding: 10,
+                        cornerRadius: 8,
+                        titleFont: {
+                            family: 'Quicksand',
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            family: 'Quicksand'
+                        }
+                    }
                 },
                 scales: {
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Tanggal',
+                        grid: {
+                            display: false
                         },
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                family: 'Quicksand',
+                                weight: 'bold'
+                            }
+                        }
                     },
                     y: {
-                        title: {
-                            display: true,
-                            text: 'Jumlah Pasien',
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(170, 143, 85, 0.1)'
                         },
+                        ticks: {
+                            color: '#555555',
+                            stepSize: 1,
+                            font: {
+                                family: 'Quicksand',
+                                weight: 'bold'
+                            }
+                        }
                     },
                 },
             },
